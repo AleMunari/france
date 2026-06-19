@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1e3a8a"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Borgogna &amp; Normandia 🇫🇷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <style>
+    :root{
+      --bg:#f0f4ff;--bg2:#dbeafe;--card:#fff;--elev:#f8faff;
+      --bord:#93c5fd;--sky:#0ea5e9;--go:#16a34a;--red:#dc2626;
+      --tx:#0a0f1c;--tx2:#1e3a8a;--muted:#6b7280;
+      --hbg:#1e3a8a;--hbord:#1e40af;
+      --shad:0 8px 32px rgba(30,58,138,.18);--shadc:0 2px 12px rgba(30,58,138,.10);
+      --hh:7rem;--bmin:4rem;
+      --rs:.625rem;--rm:1rem;--rl:1.5rem;
+      --xs:1.5rem;--sm:1.875rem;--base:2.25rem;--lg:2.625rem;--xl:3rem;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:100%;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);background-image:radial-gradient(circle at 15% 30%,rgba(37,99,235,.08) 0%,transparent 50%),radial-gradient(circle at 85% 70%,rgba(30,58,138,.06) 0%,transparent 50%);color:var(--tx);font-size:var(--base);line-height:1.8;min-height:100vh}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    :focus-visible{outline:3px solid #f59e0b;outline-offset:3px;border-radius:var(--rs)}
+
+    .app-header{position:fixed;top:0;left:0;right:0;z-index:200;height:calc(var(--hh) + env(safe-area-inset-top,0));padding-top:env(safe-area-inset-top,0);background:var(--hbg);border-bottom:3px solid var(--hbord);display:flex;align-items:center;justify-content:space-between;padding-left:1rem;padding-right:1rem;gap:.75rem;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+    .htitle{font-size:clamp(1.2rem,3.5vw,2rem);font-weight:900;color:#fff;flex:1;text-align:center;line-height:1.2}
+    .hflag{font-size:2.2rem}
+
+    .city-tabs{display:flex;background:var(--bg2);border-bottom:3px solid var(--bord);position:sticky;top:calc(var(--hh) + env(safe-area-inset-top,0));z-index:150;overflow-x:auto}
+    .city-tab{flex:1;padding:.9rem .75rem;background:transparent;border:none;font-family:inherit;font-size:var(--sm);font-weight:700;color:var(--tx2);cursor:pointer;border-bottom:4px solid transparent;transition:all .15s;white-space:nowrap;min-width:0}
+    .city-tab.active{color:var(--hbg);border-bottom-color:var(--hbg);background:var(--card)}
+    .city-tab:hover:not(.active){background:var(--bg2)}
+
+    .app-main{padding-top:calc(var(--hh) + env(safe-area-inset-top,0) + 5rem);padding-bottom:calc(2.5rem + env(safe-area-inset-bottom,0));min-height:100vh}
+    .city-section{display:none;padding:1.25rem .75rem;max-width:820px;margin:0 auto}
+    .city-section.active{display:block}
+
+    .btn-open-map{width:100%;min-height:var(--bmin);background:var(--hbg);color:#fff;border:none;border-radius:var(--rl);font-family:inherit;font-size:var(--base);font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;box-shadow:var(--shad);transition:all .15s;margin-bottom:1.25rem}
+    .btn-open-map:hover{background:var(--hbord);transform:translateY(-2px)}
+    .pulse{display:inline-block;width:1.1rem;height:1.1rem;background:#fff;border-radius:50%;animation:pa 1.5s infinite;flex-shrink:0}
+    @keyframes pa{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+
+    .map-modal{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;background:#000;visibility:hidden;pointer-events:none;overflow:hidden}
+    .map-modal.open{visibility:visible;pointer-events:auto}
+    .map-head{background:var(--hbg);color:#fff;display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;flex-shrink:0;height:calc(3rem + env(safe-area-inset-top,0));padding-top:env(safe-area-inset-top,0)}
+    .map-title{font-size:1rem;font-weight:700;flex:1}
+    .map-close{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);color:#fff;border-radius:.5rem;padding:.3rem .75rem;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap}
+    .map-close:hover{background:rgba(255,255,255,.35)}
+    #map-container{flex:1;width:100%;min-height:0;height:0;order:2}
+    .map-status{background:rgba(0,0,0,.82);color:#fff;padding:.3rem .75rem;font-size:.75rem;font-weight:600;text-align:center;flex-shrink:0;line-height:1.4;order:3;padding-bottom:calc(.3rem + env(safe-area-inset-bottom,0))}
+
+    .leaflet-popup-content-wrapper{border-radius:10px!important;font-family:'Outfit',sans-serif!important;font-size:14px!important;box-shadow:0 4px 20px rgba(0,0,0,.25)!important;max-width:220px!important}
+    .leaflet-popup-content{margin:10px 12px!important}
+    .pname{font-weight:900;font-size:15px;color:var(--hbg);margin-bottom:2px;line-height:1.3}
+    .pcat{font-size:12px;color:var(--muted);margin-bottom:2px}
+    .pprice{font-size:12px;color:#374151;margin-bottom:3px}
+    .pdist{font-size:13px;font-weight:700;color:var(--go);margin-bottom:4px}
+    .pgo{display:inline-block;background:var(--go);color:#fff;padding:5px 12px;border-radius:6px;font-weight:700;font-size:13px;text-decoration:none;margin-top:3px}
+    .pgo:hover{background:#15803d}
+
+    .search-box{background:var(--card);border:2.5px solid var(--bord);border-radius:var(--rl);padding:.75rem 1rem;margin-bottom:1.25rem;box-shadow:var(--shadc);display:flex;gap:.5rem;align-items:center}
+    .search-input{flex:1;border:none;background:transparent;font-family:inherit;font-size:var(--base);color:var(--tx);outline:none;text-align:left;min-width:0;padding-right:.25rem}
+    .search-input::placeholder{color:#94a3b8}
+    .clear-btn{background:var(--bg2);border:none;cursor:pointer;font-size:1.5rem;color:var(--muted);padding:.3rem .6rem;border-radius:.75rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;min-width:2.5rem;min-height:2.5rem;transition:background .15s}
+    .clear-btn:hover{background:var(--bord)}
+
+    .filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    .filter-btn{padding:.55rem 1rem;background:var(--card);border:2px solid var(--bord);border-radius:2rem;font-family:inherit;font-size:var(--xs);font-weight:700;color:var(--tx2);cursor:pointer;transition:all .15s}
+    .filter-btn.active{background:var(--hbg);border-color:var(--hbg);color:#fff}
+    .filter-btn:hover:not(.active){border-color:var(--hbg);color:var(--hbg)}
+
+    .grid{display:flex;flex-direction:column;gap:1rem}
+    .card{background:var(--card);border:2px solid var(--bord);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadc);transition:all .15s}
+    .card:hover{box-shadow:var(--shad);transform:translateY(-2px)}
+    .card-head{padding:1.1rem 1.25rem .75rem;display:flex;align-items:flex-start;gap:1rem}
+    .cemoji{font-size:2.75rem;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+    .cinfo{flex:1;min-width:0}
+    .cname{font-size:var(--lg);font-weight:900;color:var(--tx);line-height:1.2;margin-bottom:.25rem}
+    .ccat{display:inline-block;padding:.2rem .75rem;background:var(--bg2);border-radius:2rem;font-size:1.3rem;font-weight:700;color:var(--tx2);margin-bottom:.5rem}
+    .cdesc{font-size:var(--sm);color:#4b5563;line-height:1.6}
+    .card-meta{padding:.625rem 1.25rem;display:flex;flex-wrap:wrap;gap:.5rem;background:var(--elev);border-top:1px solid var(--bord)}
+    .badge{display:flex;align-items:center;gap:.35rem;background:var(--card);border:1.5px solid var(--bord);border-radius:var(--rs);padding:.3rem .75rem;font-size:1.3rem;font-weight:600;color:var(--tx)}
+    .card-act{padding:.875rem 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:.625rem;border-top:1px solid var(--bord)}
+    .btn-map{background:var(--sky);color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s}
+    .btn-map:hover{background:#0284c7;transform:translateY(-1px)}
+    .btn-info{background:var(--hbg);color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s}
+    .btn-info:hover{background:var(--hbord);transform:translateY(-1px)}
+    .btn-nav{background:var(--go);color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s;grid-column:1/-1}
+    .btn-nav:hover{background:#15803d;transform:translateY(-1px)}
+
+    .sec-head{font-size:var(--xl);font-weight:900;color:var(--hbg);margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;padding-bottom:.75rem;border-bottom:3px solid var(--bord)}
+    .cbadge{background:var(--hbg);color:#fff;border-radius:2rem;padding:.2rem .9rem;font-size:1.4rem;font-weight:700}
+    .nores{text-align:center;padding:3rem 1rem;color:#94a3b8;font-size:var(--base)}
+    .nores-icon{font-size:4rem;display:block;margin-bottom:1rem}
+
+    .note-banner{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:var(--xs);color:#1e3a8a;line-height:1.6;box-shadow:var(--shadc)}
+    .note-banner strong{display:block;font-size:var(--sm);margin-bottom:.25rem}
+
+    #tc{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:.5rem;pointer-events:none}
+    .toast{background:#1e293b;color:#fff;padding:1rem 1.75rem;border-radius:var(--rm);font-size:var(--sm);font-weight:600;box-shadow:0 4px 24px rgba(0,0,0,.3);opacity:0;transform:translateY(1rem);transition:all .25s;pointer-events:auto;white-space:nowrap;max-width:90vw}
+    .toast.show{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="hflag">🇫🇷</span>
+  <h1 class="htitle">Borgogna &amp; Normandia</h1>
+  <span class="hflag">🚗</span>
+</header>
+
+<nav class="city-tabs" role="tablist">
+  <button class="city-tab active" role="tab" aria-selected="true" id="tab-digione" onclick="switchCity('digione')">🍷 Digione</button>
+  <button class="city-tab" role="tab" aria-selected="false" id="tab-rouen" onclick="switchCity('rouen')">🕰️ Rouen</button>
+  <button class="city-tab" role="tab" aria-selected="false" id="tab-caen" onclick="switchCity('caen')">🏰 Caen</button>
+</nav>
+
+<main class="app-main">
+  <section id="section-digione" class="city-section active">
+    <h2 class="sec-head">🍷 Digione <span class="cbadge" id="count-digione">0</span></h2>
+    <div class="note-banner"><strong>📅 Tappa 7–8 luglio &amp; 16–17 luglio</strong>Porta d'ingresso alla Borgogna: il Palazzo dei Duchi, il percorso della Chouette, il mercato delle Halles e la grande cucina borgognona.</div>
+    <button class="btn-open-map" onclick="openMap('digione')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
+    <div class="search-box">
+      <span style="font-size:2rem">🔍</span>
+      <input type="text" class="search-input" id="search-digione" placeholder="Cerca a Digione…" oninput="renderGrid('digione')" autocomplete="off"/>
+      <button class="clear-btn" onclick="clearSearch('digione')" title="Cancella">✕</button>
+    </div>
+    <div class="filter-bar" id="filters-digione"></div>
+    <div class="grid" id="grid-digione" aria-live="polite"></div>
+  </section>
+
+  <section id="section-rouen" class="city-section">
+    <h2 class="sec-head">🕰️ Rouen <span class="cbadge" id="count-rouen">0</span></h2>
+    <div class="note-banner"><strong>📅 Tappa 8–12 luglio</strong>Cuore della Normandia medievale. Gita a Giverny (9/7) con biglietti prenotati, Jumièges (11/7) e Étretat (12/7). Centro storico tutto pianeggiante.</div>
+    <button class="btn-open-map" onclick="openMap('rouen')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
+    <div class="search-box">
+      <span style="font-size:2rem">🔍</span>
+      <input type="text" class="search-input" id="search-rouen" placeholder="Cerca a Rouen…" oninput="renderGrid('rouen')" autocomplete="off"/>
+      <button class="clear-btn" onclick="clearSearch('rouen')" title="Cancella">✕</button>
+    </div>
+    <div class="filter-bar" id="filters-rouen"></div>
+    <div class="grid" id="grid-rouen" aria-live="polite"></div>
+  </section>
+
+  <section id="section-caen" class="city-section">
+    <h2 class="sec-head">🏰 Caen <span class="cbadge" id="count-caen">0</span></h2>
+    <div class="note-banner"><strong>📅 Tappa 13–16 luglio</strong>Città di Guglielmo il Conquistatore, porta alle spiagge dello sbarco. Mémorial (14/7), Bayeux e spiagge D-Day (15/7). Prenotare il Mémorial online.</div>
+    <button class="btn-open-map" onclick="openMap('caen')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
+    <div class="search-box">
+      <span style="font-size:2rem">🔍</span>
+      <input type="text" class="search-input" id="search-caen" placeholder="Cerca a Caen…" oninput="renderGrid('caen')" autocomplete="off"/>
+      <button class="clear-btn" onclick="clearSearch('caen')" title="Cancella">✕</button>
+    </div>
+    <div class="filter-bar" id="filters-caen"></div>
+    <div class="grid" id="grid-caen" aria-live="polite"></div>
+  </section>
+</main>
+
+<div id="map-modal" class="map-modal" role="dialog" aria-modal="true">
+  <div class="map-head">
+    <span>🗺️</span>
+    <span class="map-title" id="map-title">Mappa</span>
+    <button class="map-close" onclick="closeMap()">✕ Chiudi</button>
+  </div>
+  <div class="map-status" id="map-status">In attesa…</div>
+  <div id="map-container"></div>
+</div>
+
+<div id="tc" aria-live="polite"></div>
+<div class="sr-only" id="announce" aria-live="assertive" aria-atomic="true"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+//  DATI — fonti: destinationdijon.com, jds.fr, rouentourisme.com,
+//          rouen.fr, fondation-monet.com, giverny.org,
+//          lehavre-etretat-tourisme.com, abbayedejumieges.fr,
+//          memorial-caen.fr, mba.caen.fr, abbayes-normandie.com,
+//          bayeux-bessin-tourisme.com, normandie.fr, cotad.com
+// ═══════════════════════════════════════════════════════════════
+const DATA = {
+  digione: [
+    {id:'d1',name:'Stazione di Digione-Ville',emoji:'🚉',cat:'Stazione',
+      desc:'La stazione principale di Digione, sulla linea Parigi–Lione. TGV per Parigi Gare de Lyon (~1h40) e per Lione (~1h35), regionali per Beaune e la Côte d\'Or. Punto di partenza naturale per la Route des Grands Crus.',
+      orario:'5:00–23:30',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:47.322,lng:5.0229},
+
+    {id:'d2',name:'Palazzo dei Duchi e degli Stati di Borgogna',emoji:'🏰',cat:'Monumento',
+      desc:'Sei secoli di storia in un solo edificio: l\'antico logis ducale ricostruito nel \'400 sotto Filippo il Buono, unito al palazzo classico degli Stati di Borgogna eretto da Jules Hardouin-Mansart. Oggi ospita il Municipio. Si può salire la Torre di Filippo il Buono (46 m, 316 gradini) per un panorama a 360° sulla città. Fonte: destinationdijon.com.',
+      orario:'Lun, Mer–Dom 9:30–18:00 (chiuso mar)',prezzo:'Edificio gratuito; salita torre a parte, su prenotazione',tempo:'1–1.5 ore',lat:47.3217,lng:5.0413},
+
+    {id:'d3',name:'Musée des Beaux-Arts de Dijon',emoji:'🖼️',cat:'Museo',
+      desc:'Uno dei musei più antichi di Francia, allestito dentro il Palazzo dei Duchi. Le sale gotiche custodiscono le tombe scolpite dei duchi Valois di Borgogna; le collezioni spaziano dal Medioevo al XXI secolo. Ascensore disponibile. Ingresso gratuito alle collezioni permanenti. Fonte: destinationdijon.com.',
+      orario:'Lun, Mer–Dom 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1.5–2 ore',lat:47.3219,lng:5.041},
+
+    {id:'d4',name:'Église Notre-Dame — la Chouette',emoji:'🦉',cat:'Chiesa',
+      desc:'Chiesa gotica del 1230–1250, famosa per la civetta scolpita su un contrafforte: secondo la tradizione, toccarla con la mano sinistra porta fortuna. Sulla facciata il Jacquemart, automa meccanico, batte ancora le ore. Dà il nome al percorso turistico segnato da placche in bronzo tra i sampietrini. Fonte: jds.fr.',
+      orario:'Tutti i giorni, generalmente 9–19 (salvo funzioni)',prezzo:'Gratuito',tempo:'20–30 min',lat:47.3226,lng:5.0398},
+
+    {id:'d5',name:'Cattedrale Saint-Bénigne',emoji:'⛪',cat:'Chiesa',
+      desc:'Ex abbaziale gotico-borgognona divenuta cattedrale nel 1792. Sotto l\'edificio si nasconde una rara cripta romanica dell\'anno 1000, con il martirium di San Benigno e capitelli scolpiti in un\'atmosfera intima. La guglia attuale, alta 93 metri, risale al 1896. Fonte: destinationdijon.com.',
+      orario:'Lun–Ven 9–12, 14–18:30; Sab 9–12, 14–17:30',prezzo:'Gratuita (cripta a pagamento)',tempo:'45 min',lat:47.3247,lng:5.0317},
+
+    {id:'d6',name:'Place de la Libération & Place François-Rude',emoji:'⛲',cat:'Piazza',
+      desc:'La piazza semicircolare disegnata da Hardouin-Mansart si apre davanti al Palazzo dei Duchi, con fontane a raso. A pochi passi, Place François-Rude ospita la fontana del Bareuzai, il vignaiolo che pigia l\'uva — simbolo della Digione vinicola. Entrambe pianeggianti e facilmente percorribili.',
+      orario:'Sempre aperta',prezzo:'Gratuita',tempo:'20–30 min',lat:47.3214,lng:5.0413},
+
+    {id:'d7',name:'Les Halles di Digione',emoji:'🛒',cat:'Shopping',
+      desc:'Mercato coperto in ferro e vetro del 1875, stile \'Eiffel\': qui si trovano i prodotti della Borgogna, dai formaggi al vino, dal pain d\'épices alle creme di cassis. Aperto solo tre mattine a settimana, è uno dei luoghi più autentici per la vita locale. Fonte: destinationdijon.com.',
+      orario:'Mar, Ven, Sab 7:00–13:00',prezzo:'Gratuito (acquisti a parte)',tempo:'45 min–1 ora',lat:47.3226,lng:5.0381},
+
+    {id:'d8',name:'Quartiere storico — Rue de la Chouette',emoji:'🏘️',cat:'Quartiere',
+      desc:'Il cuore medievale e rinascimentale di Digione, tra hôtels particuliers come l\'Hôtel de Vogüé e l\'Hôtel Chambellan. Il percorso della Chouette, segnalato da piccole placche in bronzo, collega i monumenti principali in una passeggiata di circa un\'ora tutta in piano. Fonte: jds.fr.',
+      orario:'Sempre aperto',prezzo:'Gratuito',tempo:'1–1.5 ore',lat:47.323,lng:5.0395},
+
+    {id:'d9',name:'Pain d\'épices — Mulot & Petitjean',emoji:'🍯',cat:'Gastronomia',
+      desc:'Maison storica del pan di zenzero digionese, fondata nel 1796: ricetta tradizionale a base di miele e farina di frumento, senza conservanti. La boutique nel centro storico vende le tipiche nonnettes e pavés, perfetti souvenir golosi.',
+      orario:'Lun–Sab 9:30–19:00',prezzo:'Gratuito (acquisti a parte)',tempo:'20–30 min',lat:47.3199,lng:5.0376},
+
+    {id:'d10',name:'La Moutarde di Digione — boutique Maille',emoji:'🫙',cat:'Gastronomia',
+      desc:'La moutarde de Dijon nasce da semi di senape macinati con aceto e vino bianco — un metodo nato qui nell\'Ottocento. La boutique storica Maille propone degustazioni e senape \'alla spina\', perfette da assaggiare sul posto. Fonte: destinationdijon.com.',
+      orario:'Lun–Sab 9:30–19:00 circa',prezzo:'Gratuito (acquisti a parte)',tempo:'20–30 min',lat:47.321,lng:5.0405},
+
+    {id:'d11',name:'Jardin Darcy e Porte Guillaume',emoji:'🌳',cat:'Giardino',
+      desc:'Giardino pubblico ottocentesco vicino alla stazione, con vasche, statue tra cui l\'Orso Bianco di François Pompon, e panchine ombreggiate — sosta tranquilla e pianeggiante. Proprio accanto si erge la Porte Guillaume, l\'arco di trionfo del 1788 che segna l\'ingresso storico in città.',
+      orario:'Generalmente 7:30–20:00',prezzo:'Gratuito',tempo:'30 min',lat:47.3236,lng:5.0218},
+
+    {id:'d12',name:'Cucina Borgognona — dove mangiare',emoji:'🍷',cat:'Gastronomia',
+      desc:'Boeuf bourguignon, escargots al burro d\'aglio, jambon persillé, gougères al formaggio, oeufs en meurette: i ristoranti del centro storico — soprattutto attorno a Place Émile-Zola e Rue Berbisey — propongono la cucina tipica borgognona con i vini della Côte d\'Or. Crème de cassis nel kir come aperitivo.',
+      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–45 a persona',tempo:'1.5 ore',lat:47.3205,lng:5.0392}
+  ],
+
+  rouen: [
+    {id:'r1',name:'Stazione Rouen Rive-Droite',emoji:'🚉',cat:'Stazione',
+      desc:'La stazione principale di Rouen, con collegamenti diretti da/per Parigi Saint-Lazare (circa 1h10) e verso Caen lungo la linea normanna. A pochi minuti a piedi dal centro storico e dalla cattedrale.',
+      orario:'Generalmente 5:00–23:00',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:49.4427,lng:1.0939},
+
+    {id:'r2',name:'Cattedrale Notre-Dame di Rouen',emoji:'⛪',cat:'Chiesa',
+      desc:'Una delle cattedrali gotiche più alte di Francia, celebre per la facciata che Monet dipinse oltre trenta volte in condizioni di luce diverse. Nella navata riposano le tombe dei duchi di Normandia, tra cui il cuore di Riccardo Cuor di Leone. Ingresso libero ogni giorno; visite guidate cripta e tesoro nei weekend. Fonte: rouentourisme.com.',
+      orario:'Tutti i giorni, generalmente 8:00–18:00 (variabile per funzioni)',prezzo:'Gratuita',tempo:'45 min–1 ora',lat:49.4402,lng:1.095},
+
+    {id:'r3',name:'Gros-Horloge',emoji:'🕰️',cat:'Monumento',
+      desc:'Orologio astronomico rinascimentale del XIV secolo, incastonato in un arco scolpito che attraversa la via pedonale più animata di Rouen. Il quadrante indica ore, fasi lunari e giorno della settimana. Si può salire al campanile per una vista ravvicinata sui tetti gotici. Fonte: rouen.fr / cityzeum.com.',
+      orario:'Generalmente Mar–Dom 10–13, 14–18:30',prezzo:'Salita campanile ~€7',tempo:'30–45 min',lat:49.4413,lng:1.0939},
+
+    {id:'r4',name:'Aître Saint-Maclou',emoji:'🦴',cat:'Monumento',
+      desc:'L\'unico ossario a graticcio rimasto in Europa: le gallerie, costruite dal 1526 dopo la peste nera del 1348, conservano decorazioni macabre in legno scolpito — teschi, ossa incrociate, attrezzi da becchino. Restaurato di recente, ospita anche mostre d\'arte e un caffè. Fonte: aitresaintmaclou.fr.',
+      orario:'Cortile accessibile di giorno; gallerie variabili (verificare)',prezzo:'Cortile gratuito (mostre a parte)',tempo:'30–45 min',lat:49.4396,lng:1.101},
+
+    {id:'r5',name:'Place du Vieux-Marché & Église Sainte-Jeanne-d\'Arc',emoji:'🔥',cat:'Piazza',
+      desc:'La piazza dove Giovanna d\'Arco fu bruciata sul rogo nel 1431. Oggi vi sorge la moderna chiesa di Sainte-Jeanne-d\'Arc (1979), il cui tetto ondulato richiama le fiamme; all\'interno, splendide vetrate rinascimentali recuperate da una chiesa distrutta nel 1944. Mercato alimentare la mattina.',
+      orario:'Chiesa generalmente Lun–Sab 10–12:30, 14–18',prezzo:'Gratuita',tempo:'30–45 min',lat:49.4416,lng:1.0908},
+
+    {id:'r6',name:'Musée des Beaux-Arts de Rouen',emoji:'🎨',cat:'Museo',
+      desc:'Una delle collezioni di pittura di provincia più importanti di Francia: da Velázquez e Caravaggio fino agli impressionisti — Monet, Sisley, Renoir — in omaggio al legame profondo tra Rouen e la nascita dell\'Impressionismo. Ascensore, sedute frequenti. Fonte: rouentourisme.com.',
+      orario:'Mer–Lun 10:00–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1.5–2 ore',lat:49.4442,lng:1.0938},
+
+    {id:'r7',name:'Abbatiale Saint-Ouen',emoji:'⛪',cat:'Chiesa',
+      desc:'Ex abbazia benedettina, capolavoro del gotico fiammeggiante: vetrate originali del Trecento e un imponente organo Cavaillé-Coll tra i più belli di Francia. Oggi sconsacrata, ospita concerti e mostre nei begli interni luminosi e facilmente accessibili.',
+      orario:'Variabile per stagione (verificare apertura)',prezzo:'Gratuita',tempo:'30–45 min',lat:49.4444,lng:1.0958},
+
+    {id:'r8',name:'Quartiere a colombages del centro storico',emoji:'🏘️',cat:'Quartiere',
+      desc:'La Rue du Gros-Horloge e le viuzze adiacenti custodiscono centinaia di case a graticcio dal Quattrocento al Cinquecento, tra le concentrazioni più dense d\'Europa. Sopravvissute ai bombardamenti del 1944, raccontano la Rouen medievale meglio di qualsiasi museo. Tutto pianeggiante.',
+      orario:'Sempre aperto',prezzo:'Gratuito',tempo:'1–2 ore',lat:49.441,lng:1.0945},
+
+    {id:'r9',name:'Giverny — Fondazione Claude Monet',emoji:'🌺',cat:'Giardino',
+      desc:'La casa rosa e i giardini dove Monet visse 43 anni, dal 1883 al 1926: il Clos Normand fiorito davanti casa e il giardino d\'acqua con lo stagno delle ninfee e il ponte giapponese, che ispirarono decine di capolavori. I vialetti in ghiaia non sono sempre agevoli; il piano superiore della casa non è accessibile. Prenotare online. Fonte: fondation-monet.com.',
+      orario:'Tutti i giorni 10:00–18:00 (1° apr – 1° nov, ultimo ingresso 17:30)',prezzo:'€11 adulti · ridotto €6.50 · €5.50 con disabilità',tempo:'1.5–2 ore',lat:49.0754,lng:1.5338},
+
+    {id:'r10',name:'Étretat — Falesie e Porte d\'Aval',emoji:'🌊',cat:'Panorama',
+      desc:'Scogliere di calcare bianco scolpite in archi spettacolari: la Porte d\'Aval e l\'Aiguille di 51 metri, rese celebri da Monet, Courbet e Maupassant. I sentieri in cima sono ripidi e sconnessi — la vista più comoda è quella dal basso, dalla spiaggia o dal paese. Non avvicinarsi sotto le pareti: rischio crolli. Fonte: lehavre-etretat-tourisme.com.',
+      orario:'Sempre accessibile (attenzione a marea e vento)',prezzo:'Gratuito',tempo:'1–2 ore (vista dal basso)',lat:49.7064,lng:0.2044},
+
+    {id:'r11',name:'Abbaye de Jumièges',emoji:'🏛️',cat:'Monumento',
+      desc:'Definita \'la più bella rovina di Francia\': abbazia benedettina fondata nel 654, in gran parte demolita nell\'Ottocento. Le altissime torri gotiche senza tetto, immerse in un parco sulle rive della Senna, restano tra i siti più suggestivi della Normandia. Terreno pianeggiante e ben curato. Fonte: abbayedejumieges.fr.',
+      orario:'15 apr–14 set: 9:30–18:30 · 15 set–14 apr: 9:30–13, 14:30–17:30',prezzo:'~€8 adulti',tempo:'1–1.5 ore',lat:49.4307,lng:0.8154},
+
+    {id:'r12',name:'Cucina Normanna — dove mangiare a Rouen',emoji:'🧀',cat:'Gastronomia',
+      desc:'Camembert, sidro e calvados, ma anche il canard à la rouennaise (anatra in salsa di sangue) e le teurgoules (budino di riso al forno): nei ristoranti del centro storico, soprattutto attorno alla Place du Vieux-Marché, si assapora la cucina tipica normanna.',
+      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–40 a persona',tempo:'1.5 ore',lat:49.442,lng:1.093}
+  ],
+
+  caen: [
+    {id:'c1',name:'Stazione di Caen',emoji:'🚉',cat:'Stazione',
+      desc:'Stazione principale, a circa 2 ore da Parigi Saint-Lazare e 1h10 da Rouen. Treni regionali per Bayeux (~20 min). Zona pedonale del centro raggiungibile a piedi in 15–20 minuti.',
+      orario:'Generalmente 5:00–23:30',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:49.1882,lng:-0.3656},
+
+    {id:'c2',name:'Château de Caen',emoji:'🏰',cat:'Monumento',
+      desc:'Una delle più grandi fortezze medievali d\'Europa: oltre 5 ettari di mura fondate verso il 1060 da Guglielmo il Conquistatore. Le mura sono liberamente percorribili tutto il giorno con vista sui tetti della città; all\'interno trovano posto il Musée de Normandie e il Musée des Beaux-Arts. Percorso in piano, accessibile. Fonte: musee-de-normandie.caen.fr.',
+      orario:'Mura: tutto il giorno · musei Mer–Lun 9:30–18 (chiuso mar)',prezzo:'Mura gratuite · musei gratuiti o tariffa ridotta',tempo:'1.5–2 ore',lat:49.1865,lng:-0.3636},
+
+    {id:'c3',name:'Musée des Beaux-Arts de Caen',emoji:'🎨',cat:'Museo',
+      desc:'Fondato nel 1801, uno dei primi musei di provincia in Francia, dentro le mura del castello ducale. Collezioni dal Quattrocento al Novecento: Perugino, Veronese, Rubens. Ascensore e sedute disponibili. Fonte: mba.caen.fr.',
+      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1–1.5 ore',lat:49.1862,lng:-0.3637},
+
+    {id:'c4',name:'Musée de Normandie',emoji:'🏺',cat:'Museo',
+      desc:'Storia ed etnografia della Normandia dalla preistoria a oggi, nei locali del castello ducale. Percorso chiaro e accessibile. Biglietto integrato con il Musée des Beaux-Arts. Fonte: musee-de-normandie.caen.fr.',
+      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito o tariffa ridotta per mostre',tempo:'1 ora',lat:49.1868,lng:-0.364},
+
+    {id:'c5',name:'Abbaye aux Hommes',emoji:'⛪',cat:'Chiesa',
+      desc:'Abbazia benedettina fondata dal 1063 da Guglielmo il Conquistatore; l\'abbaziale Saint-Étienne custodisce la sua tomba. Risparmiata dai bombardamenti del 1944 perché usata come rifugio per i civili, oggi è sede del Municipio. Chiesa accessibile. Chiostro visitabile con biglietto. Fonte: abbayes-normandie.com.',
+      orario:'Chiesa: visita libera · chiostro Lun–Ven 9–18',prezzo:'Chiesa gratuita · chiostro ~€6',tempo:'1 ora',lat:49.1825,lng:-0.3727},
+
+    {id:'c6',name:'Abbaye aux Dames',emoji:'⛪',cat:'Chiesa',
+      desc:'Abbazia gemella fondata dalla regina Matilde verso il 1060. Oggi sede del Consiglio Regionale di Normandia, propone visite guidate del chiostro e della cripta nei weekend e festivi. Terreno pianeggiante. Fonte: normandie.fr.',
+      orario:'Visite guidate weekend e festivi (verificare calendario)',prezzo:'~€5 (ridotto €3)',tempo:'1 ora',lat:49.1875,lng:-0.3534},
+
+    {id:'c7',name:'Mémorial de Caen',emoji:'🕊️',cat:'Memoria',
+      desc:'Uno dei musei sulla Seconda Guerra Mondiale più completi d\'Europa, costruito nel 1988 sopra l\'ex bunker di comando tedesco. Racconta lo sbarco in Normandia e l\'operazione Overlord attraverso filmati d\'archivio, ricostruzioni e una grande biblioteca. Accesso PMR completo, sedute frequenti, consigne gratuita. Prenotare online. Fonte: memorial-caen.fr.',
+      orario:'Generalmente 9:00–19:00 (stagionale — verificare online)',prezzo:'~€19.80 adulti · ridotto ~€17',tempo:'2.5–3 ore',lat:49.1934,lng:-0.3792},
+
+    {id:'c8',name:'Bayeux — centro storico e Cattedrale',emoji:'🏘️',cat:'Quartiere',
+      desc:'Prima città francese liberata dopo lo sbarco del 6 giugno 1944, Bayeux fu risparmiata dai bombardamenti e conserva intatto il centro medievale tra case a graticcio e hôtels particuliers lungo il fiume Aure. La cattedrale gotica dell\'XI secolo domina tutto. Centro pianeggiante e facilmente percorribile. Fonte: bayeux-bessin-tourisme.com.',
+      orario:'Ufficio turismo: apr–ott 9:30–18 · lug–ago 9–19 · nov–mar 10–17:30',prezzo:'Centro e cattedrale gratuiti',tempo:'1.5–2 ore',lat:49.2764,lng:-0.7025},
+
+    {id:'c9',name:'Tapisserie de Bayeux',emoji:'🧵',cat:'Museo',
+      desc:'Straordinario ricamo dell\'XI secolo lungo circa 70 metri, che narra per immagini la conquista normanna dell\'Inghilterra del 1066. Iscritto al registro Memoria del Mondo dell\'UNESCO. Visita al chiuso, ben climatizzata, con audioguida inclusa — ideale per chi preferisce stare seduto. Fonte: bayeux-bessin-tourisme.com.',
+      orario:'Generalmente 9:00–18:30 (estate orari più ampi — verificare)',prezzo:'~€12 adulti · ridotto ~€7',tempo:'1–1.5 ore',lat:49.2773,lng:-0.7012},
+
+    {id:'c10',name:'Omaha Beach',emoji:'🌊',cat:'Memoria',
+      desc:'Una delle cinque spiagge dello sbarco alleato del 6 giugno 1944, teatro dei combattimenti più sanguinosi della giornata. Oggi un\'ampia distesa di sabbia tranquilla tra Colleville-sur-Mer e Saint-Laurent-sur-Mer, con monumenti commemorativi lungo una passeggiata in piano facilmente accessibile. Fonte: bayeux-bessin-tourisme.com.',
+      orario:'Sempre accessibile',prezzo:'Gratuito',tempo:'1 ora',lat:49.3666,lng:-0.8486},
+
+    {id:'c11',name:'Cimitero Americano di Colleville-sur-Mer',emoji:'🪦',cat:'Memoria',
+      desc:'9.387 croci bianche e stelle di David su 70 ettari a picco su Omaha Beach. Il visitor center racconta le storie dei caduti dell\'operazione Overlord. Percorsi in piano, ben curati e accessibili anche a chi cammina con difficoltà. Oltre un milione di visitatori l\'anno. Fonte: cotad.com.',
+      orario:'Generalmente 9:00–18:00 (orari invernali ridotti — verificare)',prezzo:'Gratuito',tempo:'1–1.5 ore',lat:49.3608,lng:-0.8474},
+
+    {id:'c12',name:'Pointe du Hoc',emoji:'🪨',cat:'Memoria',
+      desc:'Promontorio tra Omaha e Utah Beach, scalato il 6 giugno 1944 dai Rangers americani. Il terreno conserva ancora crateri di bombe e bunker visitabili. Attenzione: superficie irregolare — sconsigliato a chi ha difficoltà di deambulazione. Si può comunque osservare il panorama dai punti vicini al parcheggio. Fonte: normandie-tourisme.fr.',
+      orario:'Sempre accessibile (sito all\'aperto)',prezzo:'Gratuito',tempo:'45 min–1 ora',lat:49.3899,lng:-0.9986},
+
+    {id:'c13',name:'Cucina Normanna — dove mangiare a Caen',emoji:'🍏',cat:'Gastronomia',
+      desc:'Le tripes à la mode de Caen — trippa cotta lentamente con sidro e calvados — sono il piatto storico della città. Sidro, calvados e formaggi (Camembert, Pont-l\'Évêque, Livarot) accompagnano i menù. Rue du Vaugueux, una delle strade più antiche di Caen, è il cuore della ristorazione locale.',
+      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–40 a persona',tempo:'1.5 ore',lat:49.185,lng:-0.358}
+  ]
+};
+
+
+// ═══════════════════════════════════════════════════════════
+//  STATO & CONFIG
+// ═══════════════════════════════════════════════════════════
+const CITIES = ['digione','rouen','caen'];
+
+const MAP_CENTERS = {
+  digione: {lat:47.3220, lng:5.0405, zoom:15, label:'🍷 Mappa Digione'},
+  rouen:   {lat:49.4410, lng:1.0945, zoom:15, label:'🕰️ Mappa Rouen'},
+  caen:    {lat:49.1865, lng:-0.3636, zoom:14, label:'🏰 Mappa Caen'},
+};
+
+let activeCity = 'digione';
+let activeCat = {digione:'Tutti', rouen:'Tutti', caen:'Tutti'};
+let userPos = null;
+let map = null;
+let mapCity = null;
+let userMarker = null;
+let atkMarkers = [];
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  CITIES.forEach(c => { buildFilters(c); renderGrid(c); });
+});
+
+function switchCity(city) {
+  activeCity = city;
+  document.querySelectorAll('.city-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.city-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+  document.getElementById('section-'+city).classList.add('active');
+  const tab = document.getElementById('tab-'+city);
+  tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+}
+
+function buildFilters(city) {
+  const cats = ['Tutti', ...new Set(DATA[city].map(a => a.cat))];
+  const el = document.getElementById('filters-'+city);
+  el.innerHTML = '';
+  cats.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'filter-btn' + (c==='Tutti' ? ' active' : '');
+    b.textContent = c;
+    b.onclick = () => {
+      activeCat[city] = c;
+      el.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      renderGrid(city);
+    };
+    el.appendChild(b);
+  });
+}
+
+function clearSearch(city) {
+  const inp = document.getElementById('search-'+city);
+  inp.value = '';
+  inp.focus();
+  renderGrid(city);
+}
+
+function renderGrid(city) {
+  const q = (document.getElementById('search-'+city)?.value||'').toLowerCase().trim();
+  const cat = activeCat[city]||'Tutti';
+  let items = DATA[city];
+  if (cat !== 'Tutti') items = items.filter(a => a.cat===cat);
+  if (q) items = items.filter(a =>
+    a.name.toLowerCase().includes(q) ||
+    a.desc.toLowerCase().includes(q) ||
+    a.cat.toLowerCase().includes(q)
+  );
+  if (userPos) {
+    items = items.map(a => ({...a, dist: hvs(userPos.lat, userPos.lng, a.lat, a.lng)}));
+    items.sort((a,b) => a.dist - b.dist);
+  }
+  const grid = document.getElementById('grid-'+city);
+  grid.innerHTML = '';
+  if (!items.length) {
+    grid.innerHTML = '<div class="nores"><span class="nores-icon">🔍</span><p>Nessun risultato trovato.</p></div>';
+  } else {
+    items.forEach(a => grid.appendChild(mkCard(a)));
+  }
+  const badge = document.getElementById('count-'+city);
+  if (badge) badge.textContent = items.length;
+}
+
+function mkCard(a) {
+  const el = document.createElement('article');
+  el.className = 'card';
+  const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lng}&travelmode=walking`;
+  const infoUrl = `https://www.google.com/search?q=${encodeURIComponent(a.name+' '+a.cat+' Francia')}`;
+  const db = a.dist !== undefined
+    ? `<div class="badge"><span>🚶</span> ${fdist(a.dist)} · ≈${fmin(a.dist)} min</div>` : '';
+  el.innerHTML = `
+    <div class="card-head">
+      <span class="cemoji" aria-hidden="true">${a.emoji}</span>
+      <div class="cinfo">
+        <h3 class="cname">${esc(a.name)}</h3>
+        <span class="ccat">${esc(a.cat)}</span>
+        <p class="cdesc">${esc(a.desc)}</p>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="badge"><span>🕐</span> ${esc(a.orario)}</div>
+      <div class="badge"><span>💶</span> ${esc(a.prezzo)}</div>
+      ${a.tempo && a.tempo!=='–' ? `<div class="badge"><span>⏱</span> ${esc(a.tempo)}</div>` : ''}
+      ${db}
+    </div>
+    <div class="card-act">
+      <button class="btn-map" onclick="openMapOnPlace('${a.id}')">📍 Vedi su Mappa</button>
+      <a class="btn-info" href="${infoUrl}" target="_blank" rel="noopener noreferrer">ℹ️ Info</a>
+      <a class="btn-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">🧭 Portami Lì — Navigazione</a>
+    </div>`;
+  return el;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MAPPA
+// ═══════════════════════════════════════════════════════════
+function openMap(city) {
+  const cfg = MAP_CENTERS[city];
+  document.getElementById('map-title').textContent = cfg.label;
+  document.getElementById('map-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setMapStatus('📡 Caricamento mappa…');
+
+  setTimeout(() => {
+    if (!map || mapCity !== city) {
+      if (map) { map.remove(); map=null; atkMarkers=[]; userMarker=null; }
+      map = L.map('map-container',{zoomControl:true}).setView([cfg.lat, cfg.lng], cfg.zoom);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19
+      }).addTo(map);
+      mapCity = city;
+    }
+    map.invalidateSize({animate:false});
+    setTimeout(() => map && map.invalidateSize({animate:false}), 200);
+
+    atkMarkers.forEach(m => map.removeLayer(m));
+    atkMarkers = [];
+    DATA[city].forEach(a => {
+      const ico = L.divIcon({
+        html:`<div style="font-size:1.8rem;line-height:1;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">${a.emoji}</div>`,
+        className:'',iconSize:[30,30],iconAnchor:[15,15]
+      });
+      const m = L.marker([a.lat,a.lng],{icon:ico});
+      m._aid = a.id;
+      m.bindPopup(()=>mkPopup(a),{maxWidth:220,minWidth:160});
+      m.addTo(map);
+      atkMarkers.push(m);
+    });
+
+    setMapStatus('📡 Rilevamento posizione GPS…');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          userPos = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+          if (userMarker) { userMarker.remove(); userMarker=null; }
+          const ico = L.divIcon({
+            html:`<div style="width:20px;height:20px;background:#2563eb;border:4px solid #fff;border-radius:50%;box-shadow:0 0 0 6px rgba(37,99,235,.3),0 2px 8px rgba(0,0,0,.3)"></div>`,
+            className:'',iconSize:[20,20],iconAnchor:[10,10]
+          });
+          userMarker = L.marker([userPos.lat,userPos.lng],{icon:ico,zIndexOffset:1000});
+          userMarker.bindPopup('<b style="font-size:1.4rem">📍 Sei qui</b>');
+          userMarker.addTo(map);
+          map.setView([userPos.lat,userPos.lng],16);
+          DATA[city].forEach(a => a.dist=hvs(userPos.lat,userPos.lng,a.lat,a.lng));
+          renderGrid(city);
+          setMapStatus('✅ Punto blu = tua posizione — tocca i segnaposti per distanza e navigazione');
+        },
+        () => { setMapStatus('⚠️ GPS non disponibile — attiva la posizione per le distanze a piedi'); },
+        {timeout:12000,enableHighAccuracy:true}
+      );
+    } else {
+      setMapStatus('⚠️ GPS non supportato — mappa mostrata senza posizione');
+    }
+  }, 300);
+}
+
+function mkPopup(a) {
+  const nav = `https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lng}&travelmode=walking`;
+  const d = userPos ? hvs(userPos.lat,userPos.lng,a.lat,a.lng) : null;
+  const dh = d!==null ? `<div class="pdist">🚶 ${fdist(d)} · ≈${fmin(d)} min a piedi</div>` : '';
+  return `<div><div class="pname">${esc(a.name)}</div><div class="pcat">${esc(a.cat)}</div><div class="pprice">💶 ${esc(a.prezzo)}</div>${dh}<a class="pgo" href="${nav}" target="_blank" rel="noopener noreferrer">🧭 Portami Lì</a></div>`;
+}
+
+function openMapOnPlace(id) {
+  let city = null;
+  for (const c of CITIES) {
+    if (DATA[c].find(a=>a.id===id)) { city=c; break; }
+  }
+  if (!city) return;
+  openMap(city);
+  setTimeout(() => {
+    if (!map) return;
+    map.invalidateSize({animate:false});
+    const a = DATA[city].find(x=>x.id===id);
+    if (!a) return;
+    map.setView([a.lat,a.lng],17);
+    const mk = atkMarkers.find(m=>m._aid===id);
+    if (mk) mk.openPopup();
+  }, 800);
+}
+
+function closeMap() {
+  document.getElementById('map-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function setMapStatus(t) {
+  const e = document.getElementById('map-status');
+  if(e) e.textContent = t;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════════
+function hvs(a1,n1,a2,n2){
+  const R=6371000,dA=(a2-a1)*Math.PI/180,dN=(n2-n1)*Math.PI/180;
+  const a=Math.sin(dA/2)**2+Math.cos(a1*Math.PI/180)*Math.cos(a2*Math.PI/180)*Math.sin(dN/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function fdist(m){return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km'}
+function fmin(m){return Math.ceil(m/80)}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMap()});
+</script>
+</body>
+</html>
