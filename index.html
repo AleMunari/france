@@ -18,6 +18,8 @@
       --bord:#93c5fd;--sky:#0ea5e9;--go:#16a34a;--red:#dc2626;
       --tx:#0a0f1c;--tx2:#1e3a8a;--muted:#6b7280;
       --hbg:#1e3a8a;--hbord:#1e40af;
+      --hotel:#7c3aed;--hotelbg:#f5f3ff;--hotelbord:#c4b5fd;
+      --rest:#b45309;--restbg:#fffbeb;--restbord:#fcd34d;
       --shad:0 8px 32px rgba(30,58,138,.18);--shadc:0 2px 12px rgba(30,58,138,.10);
       --hh:7rem;--bmin:4rem;
       --rs:.625rem;--rm:1rem;--rl:1.5rem;
@@ -66,7 +68,7 @@
     .pgo:hover{background:#15803d}
 
     .search-box{background:var(--card);border:2.5px solid var(--bord);border-radius:var(--rl);padding:.75rem 1rem;margin-bottom:1.25rem;box-shadow:var(--shadc);display:flex;gap:.5rem;align-items:center}
-    .search-input{flex:1;border:none;background:transparent;font-family:inherit;font-size:var(--base);color:var(--tx);outline:none;text-align:left;min-width:0;padding-right:.25rem}
+    .search-input{flex:1;border:none;background:transparent;font-family:inherit;font-size:var(--base);color:var(--tx);outline:none;text-align:left;min-width:0}
     .search-input::placeholder{color:#94a3b8}
     .clear-btn{background:var(--bg2);border:none;cursor:pointer;font-size:1.5rem;color:var(--muted);padding:.3rem .6rem;border-radius:.75rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;min-width:2.5rem;min-height:2.5rem;transition:background .15s}
     .clear-btn:hover{background:var(--bord)}
@@ -77,13 +79,35 @@
     .filter-btn:hover:not(.active){border-color:var(--hbg);color:var(--hbg)}
 
     .grid{display:flex;flex-direction:column;gap:1rem}
+
+    /* card base */
     .card{background:var(--card);border:2px solid var(--bord);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadc);transition:all .15s}
     .card:hover{box-shadow:var(--shad);transform:translateY(-2px)}
+
+    /* hotel card — viola */
+    .card.cat-hotel{border-color:var(--hotelbord);background:var(--hotelbg)}
+    .card.cat-hotel .ccat{background:#ede9fe;color:var(--hotel)}
+    .card.cat-hotel .card-meta{background:#f5f3ff}
+    .card.cat-hotel .badge{border-color:var(--hotelbord)}
+    .card.cat-hotel:hover{box-shadow:0 8px 32px rgba(124,58,237,.22)}
+
+    /* ristorante card — ambra */
+    .card.cat-ristorante{border-color:var(--restbord);background:var(--restbg)}
+    .card.cat-ristorante .ccat{background:#fef3c7;color:var(--rest)}
+    .card.cat-ristorante .card-meta{background:#fffbeb}
+    .card.cat-ristorante .badge{border-color:var(--restbord)}
+    .card.cat-ristorante:hover{box-shadow:0 8px 32px rgba(180,83,9,.20)}
+
+    /* stelle rating badge */
+    .star-bar{display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem}
+    .stars{color:#f59e0b;font-size:1.6rem;letter-spacing:-.05rem}
+    .michelin{background:#e11d48;color:#fff;border-radius:.4rem;padding:.15rem .5rem;font-size:1.1rem;font-weight:700}
+
     .card-head{padding:1.1rem 1.25rem .75rem;display:flex;align-items:flex-start;gap:1rem}
     .cemoji{font-size:2.75rem;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
     .cinfo{flex:1;min-width:0}
-    .cname{font-size:var(--lg);font-weight:900;color:var(--tx);line-height:1.2;margin-bottom:.25rem}
-    .ccat{display:inline-block;padding:.2rem .75rem;background:var(--bg2);border-radius:2rem;font-size:1.3rem;font-weight:700;color:var(--tx2);margin-bottom:.5rem}
+    .cname{font-size:var(--lg);font-weight:900;color:var(--tx);line-height:1.2;margin-bottom:.2rem}
+    .ccat{display:inline-block;padding:.2rem .75rem;background:var(--bg2);border-radius:2rem;font-size:1.3rem;font-weight:700;color:var(--tx2);margin-bottom:.4rem}
     .cdesc{font-size:var(--sm);color:#4b5563;line-height:1.6}
     .card-meta{padding:.625rem 1.25rem;display:flex;flex-wrap:wrap;gap:.5rem;background:var(--elev);border-top:1px solid var(--bord)}
     .badge{display:flex;align-items:center;gap:.35rem;background:var(--card);border:1.5px solid var(--bord);border-radius:var(--rs);padding:.3rem .75rem;font-size:1.3rem;font-weight:600;color:var(--tx)}
@@ -92,6 +116,8 @@
     .btn-map:hover{background:#0284c7;transform:translateY(-1px)}
     .btn-info{background:var(--hbg);color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s}
     .btn-info:hover{background:var(--hbord);transform:translateY(-1px)}
+    .btn-book{background:#7c3aed;color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s}
+    .btn-book:hover{background:#6d28d9;transform:translateY(-1px)}
     .btn-nav{background:var(--go);color:#fff;border:none;border-radius:var(--rm);padding:.875rem 1rem;font-family:inherit;font-size:var(--sm);font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:var(--bmin);transition:all .15s;grid-column:1/-1}
     .btn-nav:hover{background:#15803d;transform:translateY(-1px)}
 
@@ -125,7 +151,7 @@
 <main class="app-main">
   <section id="section-digione" class="city-section active">
     <h2 class="sec-head">🍷 Digione <span class="cbadge" id="count-digione">0</span></h2>
-    <div class="note-banner"><strong>📅 Tappa 7–8 luglio &amp; 16–17 luglio</strong>Porta d'ingresso alla Borgogna: il Palazzo dei Duchi, il percorso della Chouette, il mercato delle Halles e la grande cucina borgognona.</div>
+    <div class="note-banner"><strong>📅 Tappa 7–8 luglio &amp; 16–17 luglio</strong>Porta d'ingresso alla Borgogna: il Palazzo dei Duchi, il percorso della Chouette, il mercato delle Halles, la grande cucina borgognona e hotel di charme nel centro storico.</div>
     <button class="btn-open-map" onclick="openMap('digione')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
     <div class="search-box">
       <span style="font-size:2rem">🔍</span>
@@ -138,7 +164,7 @@
 
   <section id="section-rouen" class="city-section">
     <h2 class="sec-head">🕰️ Rouen <span class="cbadge" id="count-rouen">0</span></h2>
-    <div class="note-banner"><strong>📅 Tappa 8–12 luglio</strong>Cuore della Normandia medievale. Gita a Giverny (9/7) con biglietti prenotati, Jumièges (11/7) e Étretat (12/7). Centro storico tutto pianeggiante.</div>
+    <div class="note-banner"><strong>📅 Tappa 8–12 luglio</strong>Cuore della Normandia medievale. Giverny (9/7, prenotare), Jumièges (11/7), Étretat (12/7). Il Bourgtheroulde è il 5 stelle più bello della città — nel palazzo rinascimentale più antico di Rouen.</div>
     <button class="btn-open-map" onclick="openMap('rouen')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
     <div class="search-box">
       <span style="font-size:2rem">🔍</span>
@@ -151,7 +177,7 @@
 
   <section id="section-caen" class="city-section">
     <h2 class="sec-head">🏰 Caen <span class="cbadge" id="count-caen">0</span></h2>
-    <div class="note-banner"><strong>📅 Tappa 13–16 luglio</strong>Città di Guglielmo il Conquistatore, porta alle spiagge dello sbarco. Mémorial (14/7), Bayeux e spiagge D-Day (15/7). Prenotare il Mémorial online.</div>
+    <div class="note-banner"><strong>📅 Tappa 13–16 luglio</strong>Città di Guglielmo il Conquistatore e porta alle spiagge dello sbarco. Mémorial (14/7, prenotare), Bayeux + D-Day (15/7). Il Château La Chenevière è a 30 min da Caen, tra Bayeux e Omaha Beach.</div>
     <button class="btn-open-map" onclick="openMap('caen')"><span class="pulse"></span>🗺️ Apri Mappa con la mia Posizione</button>
     <div class="search-box">
       <span style="font-size:2rem">🔍</span>
@@ -180,11 +206,13 @@
 'use strict';
 
 // ═══════════════════════════════════════════════════════════════
-//  DATI — fonti: destinationdijon.com, jds.fr, rouentourisme.com,
-//          rouen.fr, fondation-monet.com, giverny.org,
-//          lehavre-etretat-tourisme.com, abbayedejumieges.fr,
-//          memorial-caen.fr, mba.caen.fr, abbayes-normandie.com,
-//          bayeux-bessin-tourisme.com, normandie.fr, cotad.com
+//  DATI — fonti: destinationdijon.com, jds.fr, guide.michelin.com,
+//          hotelsparouen.com, rouentourisme.com, rouen.fr,
+//          fondation-monet.com, giverny.org, aitresaintmaclou.fr,
+//          historial-jeannedarc.fr, lehavre-etretat-tourisme.com,
+//          abbayedejumieges.fr, memorial-caen.fr, mba.caen.fr,
+//          abbayes-normandie.com, normandie.fr, normandielovers.fr,
+//          bayeux-bessin-tourisme.com, lacheneviere.com, cotad.com
 // ═══════════════════════════════════════════════════════════════
 const DATA = {
   digione: [
@@ -192,49 +220,77 @@ const DATA = {
       desc:'La stazione principale di Digione, sulla linea Parigi–Lione. TGV per Parigi Gare de Lyon (~1h40) e per Lione (~1h35), regionali per Beaune e la Côte d\'Or. Punto di partenza naturale per la Route des Grands Crus.',
       orario:'5:00–23:30',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:47.322,lng:5.0229},
 
+    {id:'dh1',name:'Grand Hôtel La Cloche ⭐⭐⭐⭐⭐',emoji:'🏨',cat:'Hotel',
+      desc:'L\'unico 5 stelle di Digione, classificato monumento storico, affacciato sulla Place Darcy. 88 camere e 5 suite in stile Beaux-Arts, spa con volta in pietra, piscina, ristorante Les Jardins by La Cloche con cucina stagionale borgognona, bar moderno. Ascensore, parcheggio convenzionato nelle vicinanze. A 5 minuti a piedi dal Palazzo dei Duchi. Fonte: all.accor.com / destinationdijon.com.',
+      orario:'Check-in 15:00 · Check-out 12:00',prezzo:'~€250–400/notte (doppia)',tempo:'–',lat:47.3219,lng:5.0218},
+
+    {id:'dh2',name:'Hostellerie du Chapeau Rouge ⭐⭐⭐⭐',emoji:'🏨',cat:'Hotel',
+      desc:'Ex locanda ottocentesca nel cuore del centro storico, celebre per ospitare il ristorante di William Frachot (2 stelle Michelin). Camere eleganti con arredi raffinati, ascensore, WiFi. La posizione è ideale: a 3 minuti dal Palazzo dei Duchi. Un 4 stelle che vale come un 5 per la qualità dell\'esperienza gastronomica. Fonte: hoteldesducs.com.',
+      orario:'Check-in 15:00 · Check-out 12:00',prezzo:'~€150–250/notte (doppia)',tempo:'–',lat:47.3199,lng:5.039},
+
     {id:'d2',name:'Palazzo dei Duchi e degli Stati di Borgogna',emoji:'🏰',cat:'Monumento',
       desc:'Sei secoli di storia in un solo edificio: l\'antico logis ducale ricostruito nel \'400 sotto Filippo il Buono, unito al palazzo classico degli Stati di Borgogna eretto da Jules Hardouin-Mansart. Oggi ospita il Municipio. Si può salire la Torre di Filippo il Buono (46 m, 316 gradini) per un panorama a 360° sulla città. Fonte: destinationdijon.com.',
       orario:'Lun, Mer–Dom 9:30–18:00 (chiuso mar)',prezzo:'Edificio gratuito; salita torre a parte, su prenotazione',tempo:'1–1.5 ore',lat:47.3217,lng:5.0413},
 
-    {id:'d3',name:'Musée des Beaux-Arts de Dijon',emoji:'🖼️',cat:'Museo',
-      desc:'Uno dei musei più antichi di Francia, allestito dentro il Palazzo dei Duchi. Le sale gotiche custodiscono le tombe scolpite dei duchi Valois di Borgogna; le collezioni spaziano dal Medioevo al XXI secolo. Ascensore disponibile. Ingresso gratuito alle collezioni permanenti. Fonte: destinationdijon.com.',
-      orario:'Lun, Mer–Dom 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1.5–2 ore',lat:47.3219,lng:5.041},
-
-    {id:'d4',name:'Église Notre-Dame — la Chouette',emoji:'🦉',cat:'Chiesa',
-      desc:'Chiesa gotica del 1230–1250, famosa per la civetta scolpita su un contrafforte: secondo la tradizione, toccarla con la mano sinistra porta fortuna. Sulla facciata il Jacquemart, automa meccanico, batte ancora le ore. Dà il nome al percorso turistico segnato da placche in bronzo tra i sampietrini. Fonte: jds.fr.',
-      orario:'Tutti i giorni, generalmente 9–19 (salvo funzioni)',prezzo:'Gratuito',tempo:'20–30 min',lat:47.3226,lng:5.0398},
-
-    {id:'d5',name:'Cattedrale Saint-Bénigne',emoji:'⛪',cat:'Chiesa',
-      desc:'Ex abbaziale gotico-borgognona divenuta cattedrale nel 1792. Sotto l\'edificio si nasconde una rara cripta romanica dell\'anno 1000, con il martirium di San Benigno e capitelli scolpiti in un\'atmosfera intima. La guglia attuale, alta 93 metri, risale al 1896. Fonte: destinationdijon.com.',
-      orario:'Lun–Ven 9–12, 14–18:30; Sab 9–12, 14–17:30',prezzo:'Gratuita (cripta a pagamento)',tempo:'45 min',lat:47.3247,lng:5.0317},
-
-    {id:'d6',name:'Place de la Libération & Place François-Rude',emoji:'⛲',cat:'Piazza',
+    {id:'d6',name:'Place de la Libération & Place François-Rude',emoji:'⛲',cat:'Monumento',
       desc:'La piazza semicircolare disegnata da Hardouin-Mansart si apre davanti al Palazzo dei Duchi, con fontane a raso. A pochi passi, Place François-Rude ospita la fontana del Bareuzai, il vignaiolo che pigia l\'uva — simbolo della Digione vinicola. Entrambe pianeggianti e facilmente percorribili.',
       orario:'Sempre aperta',prezzo:'Gratuita',tempo:'20–30 min',lat:47.3214,lng:5.0413},
 
-    {id:'d7',name:'Les Halles di Digione',emoji:'🛒',cat:'Shopping',
-      desc:'Mercato coperto in ferro e vetro del 1875, stile \'Eiffel\': qui si trovano i prodotti della Borgogna, dai formaggi al vino, dal pain d\'épices alle creme di cassis. Aperto solo tre mattine a settimana, è uno dei luoghi più autentici per la vita locale. Fonte: destinationdijon.com.',
-      orario:'Mar, Ven, Sab 7:00–13:00',prezzo:'Gratuito (acquisti a parte)',tempo:'45 min–1 ora',lat:47.3226,lng:5.0381},
+    {id:'d3',name:'Musée des Beaux-Arts de Dijon',emoji:'🖼️',cat:'Museo',
+      desc:'Uno dei musei più antichi di Francia, allestito dentro il Palazzo dei Duchi. Le sale gotiche custodiscono le tombe scolpite dei duchi Valois di Borgogna; le collezioni spaziano dal Medioevo al XXI secolo. Ascensore disponibile, ingresso gratuito. Fonte: destinationdijon.com.',
+      orario:'Lun, Mer–Dom 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1.5–2 ore',lat:47.3219,lng:5.041},
+
+    {id:'dm1',name:'Musée de la Vie Bourguignonne',emoji:'🪣',cat:'Museo',
+      desc:'Allestito in un ex convento dei Bernardini, racconta la vita quotidiana nella Borgogna tra \'700 e \'900: botteghe ricostruite, costumi, attrezzi agricoli, manifatture. Un museo di atmosfera autentica, gratuito e raramente affollato. Fonte: destinationdijon.com.',
+      orario:'Mer–Lun 9:00–12:30, 14:00–18:00 (chiuso mar)',prezzo:'Gratuito',tempo:'1 ora',lat:47.3215,lng:5.0368},
+
+    {id:'d4',name:'Église Notre-Dame — la Chouette',emoji:'🦉',cat:'Chiesa',
+      desc:'Chiesa gotica del 1230–1250, famosa per la civetta scolpita su un contrafforte: secondo la tradizione, toccarla con la mano sinistra porta fortuna. Sulla facciata il Jacquemart, automa meccanico, batte ancora le ore. Dà il nome al percorso turistico segnato da placche in bronzo. Fonte: jds.fr.',
+      orario:'Tutti i giorni, generalmente 9–19 (salvo funzioni)',prezzo:'Gratuito',tempo:'20–30 min',lat:47.3226,lng:5.0398},
+
+    {id:'d5',name:'Cattedrale Saint-Bénigne',emoji:'⛪',cat:'Chiesa',
+      desc:'Ex abbaziale gotico-borgognona divenuta cattedrale nel 1792. Sotto l\'edificio si nasconde una rara cripta romanica dell\'anno 1000, con il martirium di San Benigno e capitelli scolpiti in atmosfera intima. La guglia, alta 93 metri, risale al 1896. Fonte: destinationdijon.com.',
+      orario:'Lun–Ven 9–12, 14–18:30; Sab 9–12, 14–17:30',prezzo:'Gratuita (cripta a pagamento)',tempo:'45 min',lat:47.3247,lng:5.0317},
 
     {id:'d8',name:'Quartiere storico — Rue de la Chouette',emoji:'🏘️',cat:'Quartiere',
-      desc:'Il cuore medievale e rinascimentale di Digione, tra hôtels particuliers come l\'Hôtel de Vogüé e l\'Hôtel Chambellan. Il percorso della Chouette, segnalato da piccole placche in bronzo, collega i monumenti principali in una passeggiata di circa un\'ora tutta in piano. Fonte: jds.fr.',
+      desc:'Il cuore medievale e rinascimentale di Digione, tra hôtels particuliers come l\'Hôtel de Vogüé e l\'Hôtel Chambellan. Il percorso della Chouette, segnalato da piccole placche in bronzo, collega i monumenti principali in una passeggiata di circa un\'ora, tutta in piano. Fonte: jds.fr.',
       orario:'Sempre aperto',prezzo:'Gratuito',tempo:'1–1.5 ore',lat:47.323,lng:5.0395},
+
+    {id:'d7',name:'Les Halles di Digione',emoji:'🛒',cat:'Shopping',
+      desc:'Mercato coperto in ferro e vetro del 1875, in stile \'Eiffel\': formaggi, vini, pain d\'épices, creme di cassis. Aperto solo tre mattine a settimana, è uno dei luoghi più autentici per respirare la vita locale. Fonte: destinationdijon.com.',
+      orario:'Mar, Ven, Sab 7:00–13:00',prezzo:'Gratuito (acquisti a parte)',tempo:'45 min–1 ora',lat:47.3226,lng:5.0381},
+
+    {id:'d11',name:'Jardin Darcy e Porte Guillaume',emoji:'🌳',cat:'Giardino',
+      desc:'Giardino pubblico ottocentesco vicino alla stazione, con vasche, statue (tra cui l\'Orso Bianco di François Pompon) e panchine ombreggiate — sosta tranquilla e pianeggiante. Proprio accanto si erge la Porte Guillaume, l\'arco di trionfo del 1788 che segna l\'ingresso storico in città.',
+      orario:'Generalmente 7:30–20:00',prezzo:'Gratuito',tempo:'30 min',lat:47.3236,lng:5.0218},
+
+    {id:'de1',name:'Route des Grands Crus — Beaune (30 min)',emoji:'🍇',cat:'Escursione',
+      desc:'A soli 30 km da Digione, la \'Capitale dei vini di Borgogna\': Beaune conserva le celebri Hospices de Beaune (1443), capolavoro gotico-fiammingo, e un centro storico murato visitabile. La strada tra Digione e Beaune attraversa i vigneti Grand Cru di Gevrey-Chambertin, Vosne-Romanée e Pommard — tra i più pregiati al mondo. Fonte: destinationdijon.com.',
+      orario:'Hospices de Beaune: ogni giorno 9–18 (estate 9–18:30)',prezzo:'Hospices ~€12 · Vigneti gratuiti (degustazioni a parte)',tempo:'Mezza giornata',lat:47.0197,lng:4.8361},
+
+    {id:'dr1',name:'William Frachot ⭐⭐ Michelin',emoji:'👨‍🍳',cat:'Ristorante',
+      desc:'Due stelle Michelin all\'Hostellerie du Chapeau Rouge: uno dei migliori ristoranti della Borgogna. Lo chef William Frachot propone una cucina creativa che esalta i prodotti locali — escargots, ris de veau, poisson de rivière — con un savoir-faire di livello internazionale. Prenotazione obbligatoria. Fonte: guide.michelin.com.',
+      orario:'Mer–Dom (verificare calendario chiusura settimanale)',prezzo:'Menu da €65 a €165 a persona',tempo:'2–2.5 ore',lat:47.3199,lng:5.039},
+
+    {id:'dr2',name:'La Maison des Cariatides ⭐ Michelin',emoji:'🏺',cat:'Ristorante',
+      desc:'Una stella Michelin in un edificio storico del 1603 — 12 cariatidi in pietra sulla facciata nel quartiere degli antiquari. La chef propone cucina contemporanea di mercato: tartare di trota, fricassée d\'escargots con spezie vadouvan, piatti di lago e fiume. Terrazza sul retro. Fonte: guide.michelin.com.',
+      orario:'Mer–Dom 12:00–13:30, 19:00–20:30 (chiuso lun-mar)',prezzo:'Menu da €45 a €75 a persona',tempo:'2 ore',lat:47.3225,lng:5.0418},
+
+    {id:'dr3',name:'Loiseau des Ducs ⭐ Michelin',emoji:'🦢',cat:'Ristorante',
+      desc:'Una stella Michelin in un hôtel particulier medievale: cucina borgognona classica e contemporanea firmata dalla brigata di casa Loiseau, la grande maison gastronomica fondata da Bernard Loiseau. Piatti di territorio, vini di piccoli produttori della Côte d\'Or. Fonte: hoteldesducs.com.',
+      orario:'Variabile (verificare online)',prezzo:'Menu da €55 a €120 a persona',tempo:'2 ore',lat:47.3214,lng:5.0395},
+
+    {id:'d12',name:'Osterie e bistrot borgognoni',emoji:'🍷',cat:'Ristorante',
+      desc:'Boeuf bourguignon, escargots al burro d\'aglio, jambon persillé, gougères, oeufs en meurette: i bistrot del centro — attorno a Place Émile-Zola e Rue Berbisey — propongono la cucina tipica borgognona con i vini della Côte d\'Or. Crème de cassis nel kir come aperitivo. Prezzi più accessibili rispetto ai ristoranti stellati.',
+      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€25–45 a persona',tempo:'1.5 ore',lat:47.3205,lng:5.0392},
 
     {id:'d9',name:'Pain d\'épices — Mulot & Petitjean',emoji:'🍯',cat:'Gastronomia',
       desc:'Maison storica del pan di zenzero digionese, fondata nel 1796: ricetta tradizionale a base di miele e farina di frumento, senza conservanti. La boutique nel centro storico vende le tipiche nonnettes e pavés, perfetti souvenir golosi.',
       orario:'Lun–Sab 9:30–19:00',prezzo:'Gratuito (acquisti a parte)',tempo:'20–30 min',lat:47.3199,lng:5.0376},
 
     {id:'d10',name:'La Moutarde di Digione — boutique Maille',emoji:'🫙',cat:'Gastronomia',
-      desc:'La moutarde de Dijon nasce da semi di senape macinati con aceto e vino bianco — un metodo nato qui nell\'Ottocento. La boutique storica Maille propone degustazioni e senape \'alla spina\', perfette da assaggiare sul posto. Fonte: destinationdijon.com.',
-      orario:'Lun–Sab 9:30–19:00 circa',prezzo:'Gratuito (acquisti a parte)',tempo:'20–30 min',lat:47.321,lng:5.0405},
-
-    {id:'d11',name:'Jardin Darcy e Porte Guillaume',emoji:'🌳',cat:'Giardino',
-      desc:'Giardino pubblico ottocentesco vicino alla stazione, con vasche, statue tra cui l\'Orso Bianco di François Pompon, e panchine ombreggiate — sosta tranquilla e pianeggiante. Proprio accanto si erge la Porte Guillaume, l\'arco di trionfo del 1788 che segna l\'ingresso storico in città.',
-      orario:'Generalmente 7:30–20:00',prezzo:'Gratuito',tempo:'30 min',lat:47.3236,lng:5.0218},
-
-    {id:'d12',name:'Cucina Borgognona — dove mangiare',emoji:'🍷',cat:'Gastronomia',
-      desc:'Boeuf bourguignon, escargots al burro d\'aglio, jambon persillé, gougères al formaggio, oeufs en meurette: i ristoranti del centro storico — soprattutto attorno a Place Émile-Zola e Rue Berbisey — propongono la cucina tipica borgognona con i vini della Côte d\'Or. Crème de cassis nel kir come aperitivo.',
-      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–45 a persona',tempo:'1.5 ore',lat:47.3205,lng:5.0392}
+      desc:'La moutarde de Dijon nasce da semi di senape macinati con aceto e vino bianco — metodo nato qui nell\'Ottocento. La boutique storica Maille propone degustazioni e senape \'alla spina\'. Fonte: destinationdijon.com.',
+      orario:'Lun–Sab 9:30–19:00 circa',prezzo:'Gratuito (acquisti a parte)',tempo:'20–30 min',lat:47.321,lng:5.0405}
   ],
 
   rouen: [
@@ -242,17 +298,25 @@ const DATA = {
       desc:'La stazione principale di Rouen, con collegamenti diretti da/per Parigi Saint-Lazare (circa 1h10) e verso Caen lungo la linea normanna. A pochi minuti a piedi dal centro storico e dalla cattedrale.',
       orario:'Generalmente 5:00–23:00',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:49.4427,lng:1.0939},
 
+    {id:'rh1',name:'Hôtel de Bourgtheroulde ⭐⭐⭐⭐⭐',emoji:'🏨',cat:'Hotel',
+      desc:'L\'unico 5 stelle di Rouen, classificato monumento storico: splendido palazzo rinascimentale del XV secolo sulla Place de la Pucelle, con il leggendario cortile dove sono scolpite le scene del Campo del Drappo d\'Oro (1520). Spa di 700 mq con piscina coperta 18×9 m (la più grande della Normandia), sauna, hammam, 8 cabine trattamento. Ristorante L\'Aumale, cucina bistronomica normanna. A 200 m dalla Cattedrale. Fonte: hotelsparouen.com.',
+      orario:'Check-in 15:00 · Check-out 12:00',prezzo:'~€200–400/notte (doppia)',tempo:'–',lat:49.4423,lng:1.0934},
+
     {id:'r2',name:'Cattedrale Notre-Dame di Rouen',emoji:'⛪',cat:'Chiesa',
-      desc:'Una delle cattedrali gotiche più alte di Francia, celebre per la facciata che Monet dipinse oltre trenta volte in condizioni di luce diverse. Nella navata riposano le tombe dei duchi di Normandia, tra cui il cuore di Riccardo Cuor di Leone. Ingresso libero ogni giorno; visite guidate cripta e tesoro nei weekend. Fonte: rouentourisme.com.',
+      desc:'Una delle cattedrali gotiche più alte di Francia, celebre per la facciata che Monet dipinse oltre trenta volte in condizioni di luce diverse. Nella navata riposano le tombe dei duchi di Normandia, tra cui il cuore di Riccardo Cuor di Leone. Ingresso libero ogni giorno. Fonte: rouentourisme.com.',
       orario:'Tutti i giorni, generalmente 8:00–18:00 (variabile per funzioni)',prezzo:'Gratuita',tempo:'45 min–1 ora',lat:49.4402,lng:1.095},
 
+    {id:'r7',name:'Abbatiale Saint-Ouen',emoji:'⛪',cat:'Chiesa',
+      desc:'Ex abbazia benedettina, capolavoro del gotico fiammeggiante: vetrate originali del Trecento e un imponente organo Cavaillé-Coll tra i più belli di Francia. Oggi sconsacrata, ospita concerti e mostre negli interni luminosi e facilmente accessibili.',
+      orario:'Variabile per stagione (verificare apertura)',prezzo:'Gratuita',tempo:'30–45 min',lat:49.4444,lng:1.0958},
+
     {id:'r3',name:'Gros-Horloge',emoji:'🕰️',cat:'Monumento',
-      desc:'Orologio astronomico rinascimentale del XIV secolo, incastonato in un arco scolpito che attraversa la via pedonale più animata di Rouen. Il quadrante indica ore, fasi lunari e giorno della settimana. Si può salire al campanile per una vista ravvicinata sui tetti gotici. Fonte: rouen.fr / cityzeum.com.',
+      desc:'Orologio astronomico rinascimentale del XIV secolo, incastonato in un arco scolpito che attraversa la via pedonale più animata di Rouen. Il quadrante indica ore, fasi lunari e giorno della settimana. Si può salire al campanile per una vista ravvicinata sui tetti gotici. Fonte: rouen.fr.',
       orario:'Generalmente Mar–Dom 10–13, 14–18:30',prezzo:'Salita campanile ~€7',tempo:'30–45 min',lat:49.4413,lng:1.0939},
 
     {id:'r4',name:'Aître Saint-Maclou',emoji:'🦴',cat:'Monumento',
-      desc:'L\'unico ossario a graticcio rimasto in Europa: le gallerie, costruite dal 1526 dopo la peste nera del 1348, conservano decorazioni macabre in legno scolpito — teschi, ossa incrociate, attrezzi da becchino. Restaurato di recente, ospita anche mostre d\'arte e un caffè. Fonte: aitresaintmaclou.fr.',
-      orario:'Cortile accessibile di giorno; gallerie variabili (verificare)',prezzo:'Cortile gratuito (mostre a parte)',tempo:'30–45 min',lat:49.4396,lng:1.101},
+      desc:'L\'unico ossario a graticcio rimasto in Europa: le gallerie, costruite dal 1526 dopo la peste nera del 1348, conservano decorazioni macabre in legno scolpito — teschi, ossa incrociate, attrezzi da becchino. Restaurato di recente, ospita anche mostre d\'arte. Fonte: aitresaintmaclou.fr.',
+      orario:'Cortile accessibile di giorno; gallerie variabili',prezzo:'Cortile gratuito (mostre a parte)',tempo:'30–45 min',lat:49.4396,lng:1.101},
 
     {id:'r5',name:'Place du Vieux-Marché & Église Sainte-Jeanne-d\'Arc',emoji:'🔥',cat:'Piazza',
       desc:'La piazza dove Giovanna d\'Arco fu bruciata sul rogo nel 1431. Oggi vi sorge la moderna chiesa di Sainte-Jeanne-d\'Arc (1979), il cui tetto ondulato richiama le fiamme; all\'interno, splendide vetrate rinascimentali recuperate da una chiesa distrutta nel 1944. Mercato alimentare la mattina.',
@@ -262,16 +326,16 @@ const DATA = {
       desc:'Una delle collezioni di pittura di provincia più importanti di Francia: da Velázquez e Caravaggio fino agli impressionisti — Monet, Sisley, Renoir — in omaggio al legame profondo tra Rouen e la nascita dell\'Impressionismo. Ascensore, sedute frequenti. Fonte: rouentourisme.com.',
       orario:'Mer–Lun 10:00–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1.5–2 ore',lat:49.4442,lng:1.0938},
 
-    {id:'r7',name:'Abbatiale Saint-Ouen',emoji:'⛪',cat:'Chiesa',
-      desc:'Ex abbazia benedettina, capolavoro del gotico fiammeggiante: vetrate originali del Trecento e un imponente organo Cavaillé-Coll tra i più belli di Francia. Oggi sconsacrata, ospita concerti e mostre nei begli interni luminosi e facilmente accessibili.',
-      orario:'Variabile per stagione (verificare apertura)',prezzo:'Gratuita',tempo:'30–45 min',lat:49.4444,lng:1.0958},
+    {id:'rm1',name:'Historial Jeanne dArc',emoji:'🏛️',cat:'Museo',
+      desc:'Museo esperienziale sull\'arcivescovado di Rouen dove si tenne il processo a Giovanna d\'Arco nel 1431. Installazioni immersive, proiezioni e ricostruzioni teatrali raccontano la storia della \'pulzella d\'Orléans\' nei luoghi stessi del processo. Durata visita guidata ~1h, prenotazione consigliata. Fonte: historial-jeannedarc.fr.',
+      orario:'Mar–Dom 10:00–19:00 (ultima entrata 18:00)',prezzo:'€10 adulti · €7 ridotto',tempo:'1–1.5 ore',lat:49.4398,lng:1.095},
 
     {id:'r8',name:'Quartiere a colombages del centro storico',emoji:'🏘️',cat:'Quartiere',
       desc:'La Rue du Gros-Horloge e le viuzze adiacenti custodiscono centinaia di case a graticcio dal Quattrocento al Cinquecento, tra le concentrazioni più dense d\'Europa. Sopravvissute ai bombardamenti del 1944, raccontano la Rouen medievale meglio di qualsiasi museo. Tutto pianeggiante.',
       orario:'Sempre aperto',prezzo:'Gratuito',tempo:'1–2 ore',lat:49.441,lng:1.0945},
 
     {id:'r9',name:'Giverny — Fondazione Claude Monet',emoji:'🌺',cat:'Giardino',
-      desc:'La casa rosa e i giardini dove Monet visse 43 anni, dal 1883 al 1926: il Clos Normand fiorito davanti casa e il giardino d\'acqua con lo stagno delle ninfee e il ponte giapponese, che ispirarono decine di capolavori. I vialetti in ghiaia non sono sempre agevoli; il piano superiore della casa non è accessibile. Prenotare online. Fonte: fondation-monet.com.',
+      desc:'La casa rosa e i giardini dove Monet visse 43 anni, dal 1883 al 1926: il Clos Normand fiorito e il giardino d\'acqua con lo stagno delle ninfee e il ponte giapponese, che ispirarono decine di capolavori. I vialetti in ghiaia non sono sempre agevoli; il piano superiore della casa non è accessibile. Prenotare online. Fonte: fondation-monet.com.',
       orario:'Tutti i giorni 10:00–18:00 (1° apr – 1° nov, ultimo ingresso 17:30)',prezzo:'€11 adulti · ridotto €6.50 · €5.50 con disabilità',tempo:'1.5–2 ore',lat:49.0754,lng:1.5338},
 
     {id:'r10',name:'Étretat — Falesie e Porte d\'Aval',emoji:'🌊',cat:'Panorama',
@@ -282,8 +346,16 @@ const DATA = {
       desc:'Definita \'la più bella rovina di Francia\': abbazia benedettina fondata nel 654, in gran parte demolita nell\'Ottocento. Le altissime torri gotiche senza tetto, immerse in un parco sulle rive della Senna, restano tra i siti più suggestivi della Normandia. Terreno pianeggiante e ben curato. Fonte: abbayedejumieges.fr.',
       orario:'15 apr–14 set: 9:30–18:30 · 15 set–14 apr: 9:30–13, 14:30–17:30',prezzo:'~€8 adulti',tempo:'1–1.5 ore',lat:49.4307,lng:0.8154},
 
-    {id:'r12',name:'Cucina Normanna — dove mangiare a Rouen',emoji:'🧀',cat:'Gastronomia',
-      desc:'Camembert, sidro e calvados, ma anche il canard à la rouennaise (anatra in salsa di sangue) e le teurgoules (budino di riso al forno): nei ristoranti del centro storico, soprattutto attorno alla Place du Vieux-Marché, si assapora la cucina tipica normanna.',
+    {id:'rr1',name:'La Couronne (1345) — più antico ristorante di Francia',emoji:'👑',cat:'Ristorante',
+      desc:'Fondata nel 1345 nella Place du Vieux-Marché, è considerata la più antica locanda di Francia: qui Julia Child consumò nel 1948 il pasto che cambiò la sua vita. Lo chef propone le grandi specialità normanne: canard à la Rouennaise (anatra in salsa di sangue), sole meunière, scampagne, formaggi regionali. Arredi in legno d\'epoca, atmosfera unica. Menu da €29 a €83. Fonte: normandielovers.fr / lacouronne-rouen.fr.',
+      orario:'Lun–Dom 12:00–14:30, 19:00–22:00',prezzo:'€35–85 a persona (menu degustazione)',tempo:'2 ore',lat:49.442,lng:1.0908},
+
+    {id:'rr2',name:'Ristorante L\'Aumale — Hôtel de Bourgtheroulde',emoji:'🍽️',cat:'Ristorante',
+      desc:'Cucina bistronomica normanna nel palazzo rinascimentale più bello di Rouen: l\'Aumale celebra i prodotti regionali — sidro, calvados, formaggio, pesce e crostacei del Canale della Manica — con una cucina raffinata e prezzi più contenuti rispetto a un gastro di alto livello. Fonte: hotelsparouen.com.',
+      orario:'Tutti i giorni 12:00–14:30, 19:00–22:00',prezzo:'€30–60 a persona',tempo:'1.5–2 ore',lat:49.4423,lng:1.0934},
+
+    {id:'r12',name:'Cucina Normanna — dove mangiare a Rouen',emoji:'🧀',cat:'Ristorante',
+      desc:'Camembert, sidro e calvados, ma anche il canard à la rouennaise e le teurgoules (budino di riso al forno): nei ristoranti del centro storico, soprattutto attorno alla Place du Vieux-Marché e nel quartiere a colombages, si assapora la cucina tipica normanna.',
       orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–40 a persona',tempo:'1.5 ore',lat:49.442,lng:1.093}
   ],
 
@@ -292,17 +364,17 @@ const DATA = {
       desc:'Stazione principale, a circa 2 ore da Parigi Saint-Lazare e 1h10 da Rouen. Treni regionali per Bayeux (~20 min). Zona pedonale del centro raggiungibile a piedi in 15–20 minuti.',
       orario:'Generalmente 5:00–23:30',prezzo:'Gratuito (biglietti a parte)',tempo:'–',lat:49.1882,lng:-0.3656},
 
+    {id:'ch1',name:'Château La Chenevière ⭐⭐⭐⭐⭐',emoji:'🏨',cat:'Hotel',
+      desc:'Manoir del XVIII secolo immerso in un parco tra Bayeux e le spiagge dello sbarco: la posizione ideale per visitare Omaha Beach, il cimitero americano e la Tapisserie di Bayeux. Due ristoranti: Le Botaniste (gastronomico, cena) e Le Petit Jardin (bistronomico, nell\'aranciera storica). Camere spaziose con boiseries e caminetti in marmo. Prodotti dal proprio orto in permacultura. Fonte: lacheneviere.com.',
+      orario:'Check-in 15:00 · Check-out 12:00',prezzo:'~€250–500/notte (doppia)',tempo:'–',lat:49.3383,lng:-0.7517},
+
+    {id:'ch2',name:'Hôtel Ivan Vautier ⭐⭐⭐⭐⭐',emoji:'🏨',cat:'Hotel',
+      desc:'L\'unico 5 stelle nella città di Caen, con spa e ristorante gourmet dello chef omonimo (1 stella Michelin). Camere moderne e confortevoli con arredi di design, parcheggio privato incluso. Ideale per chi vuole il massimo comfort con un\'esperienza gastronomica di alto livello. A 10 minuti in auto dal centro. Fonte: normandielovers.fr.',
+      orario:'Check-in 14:00 · Check-out 12:00',prezzo:'~€200–350/notte (doppia)',tempo:'–',lat:49.1935,lng:-0.3645},
+
     {id:'c2',name:'Château de Caen',emoji:'🏰',cat:'Monumento',
       desc:'Una delle più grandi fortezze medievali d\'Europa: oltre 5 ettari di mura fondate verso il 1060 da Guglielmo il Conquistatore. Le mura sono liberamente percorribili tutto il giorno con vista sui tetti della città; all\'interno trovano posto il Musée de Normandie e il Musée des Beaux-Arts. Percorso in piano, accessibile. Fonte: musee-de-normandie.caen.fr.',
       orario:'Mura: tutto il giorno · musei Mer–Lun 9:30–18 (chiuso mar)',prezzo:'Mura gratuite · musei gratuiti o tariffa ridotta',tempo:'1.5–2 ore',lat:49.1865,lng:-0.3636},
-
-    {id:'c3',name:'Musée des Beaux-Arts de Caen',emoji:'🎨',cat:'Museo',
-      desc:'Fondato nel 1801, uno dei primi musei di provincia in Francia, dentro le mura del castello ducale. Collezioni dal Quattrocento al Novecento: Perugino, Veronese, Rubens. Ascensore e sedute disponibili. Fonte: mba.caen.fr.',
-      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1–1.5 ore',lat:49.1862,lng:-0.3637},
-
-    {id:'c4',name:'Musée de Normandie',emoji:'🏺',cat:'Museo',
-      desc:'Storia ed etnografia della Normandia dalla preistoria a oggi, nei locali del castello ducale. Percorso chiaro e accessibile. Biglietto integrato con il Musée des Beaux-Arts. Fonte: musee-de-normandie.caen.fr.',
-      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito o tariffa ridotta per mostre',tempo:'1 ora',lat:49.1868,lng:-0.364},
 
     {id:'c5',name:'Abbaye aux Hommes',emoji:'⛪',cat:'Chiesa',
       desc:'Abbazia benedettina fondata dal 1063 da Guglielmo il Conquistatore; l\'abbaziale Saint-Étienne custodisce la sua tomba. Risparmiata dai bombardamenti del 1944 perché usata come rifugio per i civili, oggi è sede del Municipio. Chiesa accessibile. Chiostro visitabile con biglietto. Fonte: abbayes-normandie.com.',
@@ -312,33 +384,53 @@ const DATA = {
       desc:'Abbazia gemella fondata dalla regina Matilde verso il 1060. Oggi sede del Consiglio Regionale di Normandia, propone visite guidate del chiostro e della cripta nei weekend e festivi. Terreno pianeggiante. Fonte: normandie.fr.',
       orario:'Visite guidate weekend e festivi (verificare calendario)',prezzo:'~€5 (ridotto €3)',tempo:'1 ora',lat:49.1875,lng:-0.3534},
 
+    {id:'c3',name:'Musée des Beaux-Arts de Caen',emoji:'🎨',cat:'Museo',
+      desc:'Fondato nel 1801, uno dei primi musei di provincia in Francia, dentro le mura del castello ducale. Collezioni dal Quattrocento al Novecento: Perugino, Veronese, Rubens. Ascensore e sedute disponibili. Fonte: mba.caen.fr.',
+      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito (collezioni permanenti)',tempo:'1–1.5 ore',lat:49.1862,lng:-0.3637},
+
+    {id:'c4',name:'Musée de Normandie',emoji:'🏺',cat:'Museo',
+      desc:'Storia ed etnografia della Normandia dalla preistoria a oggi, nei locali del castello ducale. Percorso chiaro e accessibile. Fonte: musee-de-normandie.caen.fr.',
+      orario:'Mer–Lun 9:30–18:00 (chiuso mar)',prezzo:'Gratuito o tariffa ridotta per mostre',tempo:'1 ora',lat:49.1868,lng:-0.364},
+
     {id:'c7',name:'Mémorial de Caen',emoji:'🕊️',cat:'Memoria',
       desc:'Uno dei musei sulla Seconda Guerra Mondiale più completi d\'Europa, costruito nel 1988 sopra l\'ex bunker di comando tedesco. Racconta lo sbarco in Normandia e l\'operazione Overlord attraverso filmati d\'archivio, ricostruzioni e una grande biblioteca. Accesso PMR completo, sedute frequenti, consigne gratuita. Prenotare online. Fonte: memorial-caen.fr.',
       orario:'Generalmente 9:00–19:00 (stagionale — verificare online)',prezzo:'~€19.80 adulti · ridotto ~€17',tempo:'2.5–3 ore',lat:49.1934,lng:-0.3792},
-
-    {id:'c8',name:'Bayeux — centro storico e Cattedrale',emoji:'🏘️',cat:'Quartiere',
-      desc:'Prima città francese liberata dopo lo sbarco del 6 giugno 1944, Bayeux fu risparmiata dai bombardamenti e conserva intatto il centro medievale tra case a graticcio e hôtels particuliers lungo il fiume Aure. La cattedrale gotica dell\'XI secolo domina tutto. Centro pianeggiante e facilmente percorribile. Fonte: bayeux-bessin-tourisme.com.',
-      orario:'Ufficio turismo: apr–ott 9:30–18 · lug–ago 9–19 · nov–mar 10–17:30',prezzo:'Centro e cattedrale gratuiti',tempo:'1.5–2 ore',lat:49.2764,lng:-0.7025},
-
-    {id:'c9',name:'Tapisserie de Bayeux',emoji:'🧵',cat:'Museo',
-      desc:'Straordinario ricamo dell\'XI secolo lungo circa 70 metri, che narra per immagini la conquista normanna dell\'Inghilterra del 1066. Iscritto al registro Memoria del Mondo dell\'UNESCO. Visita al chiuso, ben climatizzata, con audioguida inclusa — ideale per chi preferisce stare seduto. Fonte: bayeux-bessin-tourisme.com.',
-      orario:'Generalmente 9:00–18:30 (estate orari più ampi — verificare)',prezzo:'~€12 adulti · ridotto ~€7',tempo:'1–1.5 ore',lat:49.2773,lng:-0.7012},
 
     {id:'c10',name:'Omaha Beach',emoji:'🌊',cat:'Memoria',
       desc:'Una delle cinque spiagge dello sbarco alleato del 6 giugno 1944, teatro dei combattimenti più sanguinosi della giornata. Oggi un\'ampia distesa di sabbia tranquilla tra Colleville-sur-Mer e Saint-Laurent-sur-Mer, con monumenti commemorativi lungo una passeggiata in piano facilmente accessibile. Fonte: bayeux-bessin-tourisme.com.',
       orario:'Sempre accessibile',prezzo:'Gratuito',tempo:'1 ora',lat:49.3666,lng:-0.8486},
 
     {id:'c11',name:'Cimitero Americano di Colleville-sur-Mer',emoji:'🪦',cat:'Memoria',
-      desc:'9.387 croci bianche e stelle di David su 70 ettari a picco su Omaha Beach. Il visitor center racconta le storie dei caduti dell\'operazione Overlord. Percorsi in piano, ben curati e accessibili anche a chi cammina con difficoltà. Oltre un milione di visitatori l\'anno. Fonte: cotad.com.',
+      desc:'9.387 croci bianche e stelle di David su 70 ettari a picco su Omaha Beach. Il visitor center racconta le storie dei caduti dell\'operazione Overlord. Percorsi in piano, ben curati e accessibili anche a chi cammina con difficoltà. Fonte: cotad.com.',
       orario:'Generalmente 9:00–18:00 (orari invernali ridotti — verificare)',prezzo:'Gratuito',tempo:'1–1.5 ore',lat:49.3608,lng:-0.8474},
 
     {id:'c12',name:'Pointe du Hoc',emoji:'🪨',cat:'Memoria',
-      desc:'Promontorio tra Omaha e Utah Beach, scalato il 6 giugno 1944 dai Rangers americani. Il terreno conserva ancora crateri di bombe e bunker visitabili. Attenzione: superficie irregolare — sconsigliato a chi ha difficoltà di deambulazione. Si può comunque osservare il panorama dai punti vicini al parcheggio. Fonte: normandie-tourisme.fr.',
+      desc:'Promontorio tra Omaha e Utah Beach, scalato il 6 giugno 1944 dai Rangers americani. Il terreno conserva ancora crateri di bombe e bunker visitabili. Attenzione: superficie irregolare — sconsigliato a chi ha difficoltà di deambulazione. Si può osservare il panorama dai punti vicini al parcheggio. Fonte: normandie-tourisme.fr.',
       orario:'Sempre accessibile (sito all\'aperto)',prezzo:'Gratuito',tempo:'45 min–1 ora',lat:49.3899,lng:-0.9986},
 
-    {id:'c13',name:'Cucina Normanna — dove mangiare a Caen',emoji:'🍏',cat:'Gastronomia',
-      desc:'Le tripes à la mode de Caen — trippa cotta lentamente con sidro e calvados — sono il piatto storico della città. Sidro, calvados e formaggi (Camembert, Pont-l\'Évêque, Livarot) accompagnano i menù. Rue du Vaugueux, una delle strade più antiche di Caen, è il cuore della ristorazione locale.',
-      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–40 a persona',tempo:'1.5 ore',lat:49.185,lng:-0.358}
+    {id:'c8',name:'Bayeux — centro storico e Cattedrale',emoji:'🏘️',cat:'Quartiere',
+      desc:'Prima città francese liberata dopo lo sbarco del 6 giugno 1944, Bayeux fu risparmiata dai bombardamenti e conserva intatto il centro medievale tra case a graticcio e hôtels particuliers lungo il fiume Aure. La cattedrale gotica dell\'XI secolo domina tutto. Centro pianeggiante. Fonte: bayeux-bessin-tourisme.com.',
+      orario:'Ufficio turismo: apr–ott 9:30–18 · lug–ago 9–19 · nov–mar 10–17:30',prezzo:'Centro e cattedrale gratuiti',tempo:'1.5–2 ore',lat:49.2764,lng:-0.7025},
+
+    {id:'c9',name:'Tapisserie de Bayeux',emoji:'🧵',cat:'Museo',
+      desc:'Straordinario ricamo dell\'XI secolo lungo circa 70 metri, che narra per immagini la conquista normanna dell\'Inghilterra del 1066. Iscritto al registro Memoria del Mondo dell\'UNESCO. Visita al chiuso, ben climatizzata, con audioguida inclusa — ideale per chi preferisce stare seduto. Fonte: bayeux-bessin-tourisme.com.',
+      orario:'Generalmente 9:00–18:30 (estate orari più ampi — verificare)',prezzo:'~€12 adulti · ridotto ~€7',tempo:'1–1.5 ore',lat:49.2773,lng:-0.7012},
+
+    {id:'cr1',name:'Restaurant Ivan Vautier ⭐ Michelin',emoji:'👨‍🍳',cat:'Ristorante',
+      desc:'Una stella Michelin: lo chef Ivan Vautier elabora prodotti normanni d\'eccellenza — crostacei, agnello prés-salés, formaggi — con tecnica contemporanea. L\'unico ristorante stellato di Caen. All\'interno del suo omonimo hotel 5 stelle. Prenotazione obbligatoria. Fonte: normandielovers.fr.',
+      orario:'Mar–Sab 12:00–14:00, 19:30–21:30 (verificare)',prezzo:'Menu da €65 a €130 a persona',tempo:'2–2.5 ore',lat:49.1935,lng:-0.3645},
+
+    {id:'cr2',name:'Café Mancel — nel Castello di Caen',emoji:'🏰',cat:'Ristorante',
+      desc:'Ristorante di qualità all\'interno del castello ducale di Caen, tra bastioni medievali e vista sui tetti gotici. Cucina creativa a base di prodotti normanni, tra 21 e 47 euro a persona. Location insolita e memorabile — si pranza letteralmente in un museo all\'aperto. Fonte: normandielovers.fr.',
+      orario:'Mar–Dom 12:00–14:30 (verificare apertura)',prezzo:'€25–50 a persona',tempo:'1.5 ore',lat:49.1865,lng:-0.3636},
+
+    {id:'cr3',name:'Le Botaniste — Château La Chenevière',emoji:'🌿',cat:'Ristorante',
+      desc:'Ristorante gastronomico del Château La Chenevière, a cura degli chef Didier Robin e Hugo Genty: menu stagionali costruiti sui prodotti del proprio orto in permacultura e sui migliori produttori normanni. Abbinamenti vini curati dal sommelier. Cornice romantica in un manoir del \'700. Fonte: lacheneviere.com.',
+      orario:'Cena: Mar–Dom 19:30–21:30 · Colazione a buffet ogni mattina',prezzo:'Menu da €70 a €140 a persona',tempo:'2–2.5 ore',lat:49.3383,lng:-0.7517},
+
+    {id:'c13',name:'Cucina Normanna a Caen — Rue du Vaugueux',emoji:'🍏',cat:'Ristorante',
+      desc:'Le tripes à la mode de Caen — trippa cotta lentamente con sidro e calvados — sono il piatto storico della città. Sidro, calvados e formaggi (Camembert, Pont-l\'Évêque, Livarot) accompagnano i menù. La Rue du Vaugueux, una delle strade più antiche di Caen, è il cuore della ristorazione tipica locale.',
+      orario:'Ristoranti: generalmente 12–14, 19–22',prezzo:'€20–40 a persona',tempo:'1.5 ore',lat:49.1843,lng:-0.354}
   ]
 };
 
@@ -351,14 +443,20 @@ const CITIES = ['digione','rouen','caen'];
 const MAP_CENTERS = {
   digione: {lat:47.3220, lng:5.0405, zoom:15, label:'🍷 Mappa Digione'},
   rouen:   {lat:49.4410, lng:1.0945, zoom:15, label:'🕰️ Mappa Rouen'},
-  caen:    {lat:49.1865, lng:-0.3636, zoom:14, label:'🏰 Mappa Caen'},
+  caen:    {lat:49.1865, lng:-0.3636, zoom:13, label:'🏰 Mappa Caen'},
+};
+
+// Categorie con accento cromatico speciale
+const CAT_CLASS = {
+  'Hotel': 'cat-hotel',
+  'Ristorante': 'cat-ristorante',
 };
 
 let activeCity = 'digione';
-let activeCat = {digione:'Tutti', rouen:'Tutti', caen:'Tutti'};
-let userPos = null;
-let map = null;
-let mapCity = null;
+let activeCat  = {digione:'Tutti', rouen:'Tutti', caen:'Tutti'};
+let userPos    = null;
+let map        = null;
+let mapCity    = null;
 let userMarker = null;
 let atkMarkers = [];
 
@@ -379,7 +477,13 @@ function switchCity(city) {
 }
 
 function buildFilters(city) {
-  const cats = ['Tutti', ...new Set(DATA[city].map(a => a.cat))];
+  // Ordine fisso categorie per leggibilità
+  const ORDER = ['Tutti','Hotel','Ristorante','Gastronomia','Monumento','Chiesa','Museo','Piazza','Quartiere','Giardino','Shopping','Panorama','Escursione','Memoria','Stazione'];
+  const present = new Set(DATA[city].map(a => a.cat));
+  const cats = ORDER.filter(c => c==='Tutti' || present.has(c));
+  // aggiungi eventuali categorie non in ORDER
+  DATA[city].forEach(a => { if(!cats.includes(a.cat)) cats.push(a.cat); });
+
   const el = document.getElementById('filters-'+city);
   el.innerHTML = '';
   cats.forEach(c => {
@@ -398,8 +502,7 @@ function buildFilters(city) {
 
 function clearSearch(city) {
   const inp = document.getElementById('search-'+city);
-  inp.value = '';
-  inp.focus();
+  inp.value = ''; inp.focus();
   renderGrid(city);
 }
 
@@ -428,18 +531,66 @@ function renderGrid(city) {
   if (badge) badge.textContent = items.length;
 }
 
+function starBar(name, cat) {
+  // stelle per hotel
+  const stars5 = (name.includes('⭐⭐⭐⭐⭐'));
+  const stars4  = (!stars5 && name.includes('⭐⭐⭐⭐'));
+  // Michelin
+  const mich2 = name.includes('⭐⭐ Michelin');
+  const mich1 = (!mich2 && name.includes('⭐ Michelin'));
+
+  if (cat==='Hotel') {
+    if (stars5) return '<div class="star-bar"><span class="stars">★★★★★</span></div>';
+    if (stars4)  return '<div class="star-bar"><span class="stars">★★★★</span></div>';
+  }
+  if (cat==='Ristorante') {
+    if (mich2) return '<div class="star-bar"><span class="michelin">🔴🔴 2 stelle Michelin</span></div>';
+    if (mich1) return '<div class="star-bar"><span class="michelin">🔴 1 stella Michelin</span></div>';
+  }
+  return '';
+}
+
+function cleanName(name) {
+  return name.replace(/⭐+(\s*Michelin)?/g,'').replace(/\s+$/,'').trim();
+}
+
 function mkCard(a) {
   const el = document.createElement('article');
-  el.className = 'card';
-  const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lng}&travelmode=walking`;
+  const catClass = CAT_CLASS[a.cat] || '';
+  el.className = 'card ' + catClass;
+
+  const navUrl  = `https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lng}&travelmode=walking`;
   const infoUrl = `https://www.google.com/search?q=${encodeURIComponent(a.name+' '+a.cat+' Francia')}`;
+  const bookUrl = `https://www.google.com/search?q=${encodeURIComponent('prenota '+a.name+' '+a.cat)}`;
+
   const db = a.dist !== undefined
     ? `<div class="badge"><span>🚶</span> ${fdist(a.dist)} · ≈${fmin(a.dist)} min</div>` : '';
+
+  // pulsanti specifici per categoria
+  let actBtns = '';
+  if (a.cat === 'Hotel') {
+    actBtns = `
+      <button class="btn-map" onclick="openMapOnPlace('${a.id}')">📍 Mappa</button>
+      <a class="btn-book" href="${bookUrl}" target="_blank" rel="noopener noreferrer">🛎️ Prenota</a>
+      <a class="btn-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">🧭 Portami all'Hotel</a>`;
+  } else if (a.cat === 'Ristorante') {
+    actBtns = `
+      <button class="btn-map" onclick="openMapOnPlace('${a.id}')">📍 Mappa</button>
+      <a class="btn-book" href="${bookUrl}" target="_blank" rel="noopener noreferrer">📞 Prenota Tavolo</a>
+      <a class="btn-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">🧭 Portami al Ristorante</a>`;
+  } else {
+    actBtns = `
+      <button class="btn-map" onclick="openMapOnPlace('${a.id}')">📍 Vedi su Mappa</button>
+      <a class="btn-info" href="${infoUrl}" target="_blank" rel="noopener noreferrer">ℹ️ Info</a>
+      <a class="btn-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">🧭 Portami Lì — Navigazione</a>`;
+  }
+
   el.innerHTML = `
     <div class="card-head">
       <span class="cemoji" aria-hidden="true">${a.emoji}</span>
       <div class="cinfo">
-        <h3 class="cname">${esc(a.name)}</h3>
+        ${starBar(a.name, a.cat)}
+        <h3 class="cname">${esc(cleanName(a.name))}</h3>
         <span class="ccat">${esc(a.cat)}</span>
         <p class="cdesc">${esc(a.desc)}</p>
       </div>
@@ -450,11 +601,7 @@ function mkCard(a) {
       ${a.tempo && a.tempo!=='–' ? `<div class="badge"><span>⏱</span> ${esc(a.tempo)}</div>` : ''}
       ${db}
     </div>
-    <div class="card-act">
-      <button class="btn-map" onclick="openMapOnPlace('${a.id}')">📍 Vedi su Mappa</button>
-      <a class="btn-info" href="${infoUrl}" target="_blank" rel="noopener noreferrer">ℹ️ Info</a>
-      <a class="btn-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">🧭 Portami Lì — Navigazione</a>
-    </div>`;
+    <div class="card-act">${actBtns}</div>`;
   return el;
 }
 
@@ -525,14 +672,13 @@ function mkPopup(a) {
   const nav = `https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lng}&travelmode=walking`;
   const d = userPos ? hvs(userPos.lat,userPos.lng,a.lat,a.lng) : null;
   const dh = d!==null ? `<div class="pdist">🚶 ${fdist(d)} · ≈${fmin(d)} min a piedi</div>` : '';
-  return `<div><div class="pname">${esc(a.name)}</div><div class="pcat">${esc(a.cat)}</div><div class="pprice">💶 ${esc(a.prezzo)}</div>${dh}<a class="pgo" href="${nav}" target="_blank" rel="noopener noreferrer">🧭 Portami Lì</a></div>`;
+  const label = (a.cat==='Hotel') ? '🛎️ Prenota' : (a.cat==='Ristorante') ? '📞 Prenota' : '🧭 Portami Lì';
+  return `<div><div class="pname">${esc(cleanName(a.name))}</div><div class="pcat">${esc(a.cat)}</div><div class="pprice">💶 ${esc(a.prezzo)}</div>${dh}<a class="pgo" href="${nav}" target="_blank" rel="noopener noreferrer">${label}</a></div>`;
 }
 
 function openMapOnPlace(id) {
   let city = null;
-  for (const c of CITIES) {
-    if (DATA[c].find(a=>a.id===id)) { city=c; break; }
-  }
+  for (const c of CITIES) { if (DATA[c].find(a=>a.id===id)) { city=c; break; } }
   if (!city) return;
   openMap(city);
   setTimeout(() => {
@@ -567,6 +713,7 @@ function hvs(a1,n1,a2,n2){
 function fdist(m){return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km'}
 function fmin(m){return Math.ceil(m/80)}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function cleanName(n){return n.replace(/⭐+(\s*(Michelin)?)?/g,'').trim()}
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMap()});
 </script>
